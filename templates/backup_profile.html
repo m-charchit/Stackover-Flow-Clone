@@ -1,0 +1,30 @@
+{% extends "layout.html" %} {% block headcss %}
+<link rel="stylesheet" href='{{url_for("static",filename="profile.css")}}'> {% endblock %} {% block body %} {% if user ==
+none %}
+<h1 class="text-center" style="margin:200px;">User not found</h1>
+{%else%}
+
+<div class="row mb-3 align-items-center">
+	<div class="col-sm text-center text-sm-end">
+			<img src="https://static.vecteezy.com/system/resources/previews/000/420/553/original/avatar-icon-vector-illustration.jpg" height=200 width=200 class="rounded-circle border border-primary">
+  </div>
+  <div class="col-sm text-center text-sm-start">
+    <p class="h6 text-muted">User Info</p>
+      <h3>{{user.username}}</h3>
+    <p>{{user.title}}</p>
+    <p>{{user.about|safe}}</p>
+  </div>
+  <div class="col-sm text-center text-sm-start">
+    <p class="h6 text-muted">Social Media</p>
+    <p>Github</p>
+    <p>Facebook</p>
+    <p>Joined {{user.date[:10]}}</p>
+      {%if user.username == session['user']%}
+    <a href="/users/edit/{{session['user']}}"><button class="btn btn-primary">Edit Profile</button></a>
+      {%endif%}
+  </div>
+</div>
+
+
+{%endif%}
+{% endblock %}

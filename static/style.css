@@ -1,0 +1,212 @@
+body {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16.5px;
+    line-height: 23px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+}
+html {
+    width: 100%;
+}
+
+.grid_ques {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-column-gap: 2px
+}
+.edit-delete {
+    float: right;
+    display: inline;
+}
+.link-btn {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: #069;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btns:hover {
+    color: rgb(23, 50, 77);
+    text-decoration: none;
+}
+.status {
+    display: block;
+    text-align: center;
+    margin-right: 10px;
+}
+.answered {
+    border: 2px solid #48a868;
+    padding: 4px;
+    border-radius: 8px;
+}
+.btns {
+    font-size: small;
+    margin: 3px;
+    color: rgb(106, 115, 124);
+    text-decoration: none;
+}
+.tag {
+    float: left;
+    display: block;
+    font-size: 10px;
+    margin-top: 6px;
+}
+.ptag {
+    margin-right: 4px;
+    padding: 2px;
+    background-color: rgb(209, 229, 241);
+}
+.ptag::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.ptag:hover {
+    background-color: rgb(230, 239, 241);
+}
+.user {
+    float: right;
+    line-height: 12px;
+    background: #e1ecf4;
+    padding: 2px;
+}
+.user-a {
+    font-size: 14px;
+}
+.Date {
+    font-size: 9px;
+}
+.title-ques {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Liberation Sans, sans-serif;
+    font-weight: 400;
+    font-size: 1.87692308rem;
+}
+.deletecomm {
+    color: white;
+}
+.commentdiv:hover .deletecomm {
+    color: red;
+}
+.textarea {
+    overflow: auto;
+    resize: vertical;
+    height: 80px;
+    border: 2px solid black;
+}
+.scroll {
+    position: fixed;
+    bottom: 20px;
+    right:20px;
+    border-radius: 50%;
+    outline: none;
+    display: none;
+    z-index: 3;
+}
+.number {
+    display: inline-block;
+    text-align: center;
+}
+.vote {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.up-vote {
+    color: dimgray;
+    cursor: pointer;
+}
+.down-vote {
+    cursor: pointer;
+    color: dimgray;
+}
+hr {
+    margin-top: 2.5rem;
+}
+code {
+  line-height: 100%;
+    background-color: #e8e8e8;
+    border-radius: 3px;
+    padding: .1rem .2rem;
+    color: black;
+}
+pre code {
+    background-color: inherit;
+}
+blockquote {
+    border-left: 4px solid #ccc;
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+}
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+.mce-content-body pre {
+    word-wrap: normal;
+    white-space: nowrap;
+    background: #f6f6f6;
+    max-height:  400px; 
+    overflow: overlay;
+}
+.mce-content-body pre::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+
+}
+.mce-content-body pre::-webkit-scrollbar-thumb {
+    background:rgb(197 197 197);
+    border-radius: 10px;
+}
+.mce-content-body pre::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: transparent;
+  }
+a:hover {
+    text-decoration: none;
+}
+pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+svg {
+    float: left;
+    clear: both;
+}
+.comm {
+    margin-top: -68px;
+    margin-left: 20px
+}
+/* @media only screen and (max-width: 1199.98px) {
+    .comm {
+        margin-left: 0px;
+    }
+    .collapse {
+        margin-top: 16px;
+    }
+} */
+
+
+
+
+
+@media only screen and (max-width: 998.98px) {
+    .comm {
+        margin-top: 0px;
+    }
+}
+@media only screen and (max-width: 530px) {
+    .form-group {
+        padding: 0px 21px 0px 21px !important;
+    }
+}
+@media only screen and (max-width: 575.98px) {
+    .mce-content-body{
+        width: 80vw !important;
+    }
+}

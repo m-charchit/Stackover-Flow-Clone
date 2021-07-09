@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+{% block headcss %}
+<link rel="stylesheet" href='{{url_for("static",filename="about.css")}}'> 
+{% endblock %} 
+
+
+<h3 class="text-center heading">The devs behind all of this work</h3>
+<div class="container"> 
+	<div class="row">
+	{% for i in users %}
+		<div class="col" style="margin-bottom: 20px;">
+			<div class="card cards" style="align-items:center; text-align: center; padding-bottom:20px;">
+				<img class="card-img-top" src="https://static.vecteezy.com/system/resources/previews/000/420/553/original/avatar-icon-vector-illustration.jpg" alt="Card image cap" style="width:300px; height:300px">
+    <div class="card-body">
+      <h5 class="card-title">{{i.username}}</h5>
+        <p class="card-text">
+            {{i.title}}
+        </p>
+    </div>
+    <a href="/profile/{{i.username}}" class="btn btn-primary">See Profile</a>
+    </div>
+    </div>
+  {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+

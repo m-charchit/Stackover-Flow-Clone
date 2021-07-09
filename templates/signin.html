@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+{% for cat,message in messages %}
+<div class="alert alert-{{cat}} alert-dismissible fade show" role="alert">
+  {{message}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<!-- {% if otp %} -->
+<style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+</style>
+<link href="{{url_for('static',filename='../static/signin.css')}}" rel="stylesheet">
+
+<!-- <body class="text-center">
+    <form class="form-signin" action="/otp" method="POST">
+        <h1 class="h3 mb-3 font-weight-normal">Enter the otp we just sent to your gmail</h1>
+        <label for="uname" class="sr-only">Email address</label>
+        <label for="inputPassword" class="sr-only">otp</label>
+        <input
+            type="text"
+            name="otp"
+            id="inputPassword"
+            class="form-control"
+            placeholder="otp"
+            required=""
+        >
+        <p>The otp will expire within 10 minutes after sending.</p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">submit</button>
+        <div class="checkbox mb-3">
+          <label>
+              <input
+                  type="checkbox"
+                  value="not_checked"
+                  id="check"
+                  name="remember"
+              >
+              Remember me
+          </label>
+      </div>
+    </form>
+    {% else %} -->
+    <div class="container mt-5">
+          <h1 class="text-center display-4">Sign In</h1>
+            <!-- <a href="/google_login">
+                <img
+                    src="{{url_for('static',filename='../static/google.png')}}"
+                    alt="sign In with google"
+                    srcset=""
+                    width="134"
+                    height="41"
+                >
+            </a> -->
+            <form action="/signin" method="post">
+              <div class="mb-3">
+                <label for="name" class="form-label">Username</label>
+                <input type="name" name="username" id="name" class="form-control" aria-describedby="emailHelp" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass" class="form-label">Password</label>
+                <input type="password" class="form-control" id="pass" name="password" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    {% endif %}
+{% block script %}
+    <script>
+  $(document).ready(function () {
+    
+$("#check").change(function(){
+  if ($('#check').is(":checked")){
+    $('#check').val("checked")
+  }
+  else{
+  $('#check').val("not_checked")
+}})
+}
+)
+    </script>
+    {% endblock script %}
+  {% endblock %}
