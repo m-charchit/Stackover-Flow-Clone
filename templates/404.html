@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block headcss %}
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet">
+	<style type="text/css" media="screen">
+	h1,h2{
+		font-family: Roboto;
+	}
+	.heading{
+		font-family: Roboto;
+		font-style: normal;
+		font-size: 150px;
+		font-weight: 900;
+		line-height: 150px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	.goto{
+		transition: 0.3s;
+        color:white;
+        border:2px solid black;
+		background-color: black;
+		border-radius: 50px;
+		padding-right: 17px;
+		padding-left: 17px;
+		padding-top: 7px;
+		padding-bottom: 7px;
+		font-family: Roboto;
+		font-weight: 600;
+	}
+	.goto:hover{
+		background-color: transparent;
+        color:black;
+	}
+    .goto:focus{
+        color:white;
+    }
+	</style>
+	<title>404 not found</title>
+{% endblock%}
+{% block body %}
+<body>
+<div class="container text-center text-dark">
+	<div class="row row-cols-1 justify-content-center">
+		<div class="col mt-5">
+			<h1 class="heading">404</h1>
+			<h1 style="font-weight:900">Page not found</h1>
+		</div>
+		<div class="col mt-2">
+			<input class="form-control mx-auto" style="width:47%" type="search" name="" value="" placeholder="press enter to search">
+			<p class="mt-2" style="font-weight:500">Maybe try searching</p>
+		</div>
+		<div class="col mt-2">
+			<a href="/" title="go back to homepage" class="goto text-decoration-none link-dark">Homepage</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

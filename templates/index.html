@@ -157,18 +157,21 @@
                     {% endfor %}
                 </div>
                 <div class="col">
-
-                    <p class="user">
-                        
-                        <img src="{{ques.question_user.pic|url_of_img}}" alt="" width=40 height=40 />
-                        
+                        <div class="row">
+                            <div class="col">
+                        <img src="{{ques.question_user.pic|url_of_img}}" style="float:right;"alt="" width=28 height=28 />
+                        </div>
+                        <div class="user col">
                         <a href="/profile/{{ques.username}}" class="user-a">{{ques.username}}</a>
 
                         <br>
                         <span class="Date">
                             {{ques.date}}
                         </span>
-                    </p>
+                    </div>
+                    
+                    </div>
+                    
                 </div>
             </div>
             </div>
@@ -270,7 +273,7 @@
             </div>
             <div class="col">
                 <p class="user">
-                    <img src="{{question.question_user.pic|url_of_img}}" alt="" width=40 height=40 />
+                    <img src="{{question.question_user.pic|url_of_img}}" alt="" width=28 height=28 />
                     <a href="/profile/{{question.username}}" class="user-a">{{ question.username }}</a>
                     <br>
                     <span class="Date">
@@ -299,7 +302,7 @@
             {% for com in comment %}
 
             <div class="commentdiv" id="myids-{{loop.index}}">
-<div>
+<div class="comment">
                 {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
                 </a> on {{com.date}}
                 </div>
@@ -428,7 +431,7 @@
             {% for com in comment %}
             {% if ans.ans_no == com.sno %}
             <div class="commentdiv" id="myid-{{loop.index}}" style="display:flex;">
-                <div>
+                <div class="comment">
                 {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
                 </a> on {{com.date}}
                     

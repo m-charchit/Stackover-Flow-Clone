@@ -89,6 +89,12 @@ html {
 .commentdiv:hover .deletecomm {
     color: red;
 }
+.comment{
+    display: flex;
+}
+.comment > * {
+  margin-right:3px ;
+}
 .textarea {
     overflow: auto;
     resize: vertical;

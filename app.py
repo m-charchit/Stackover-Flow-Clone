@@ -82,7 +82,8 @@ class Answers(db.Model):
     date = db.Column(db.String(15))
     ques_id = db.Column(db.Integer, db.ForeignKey("question.sno"))
     username = db.Column(db.String(20),db.ForeignKey("detail.username"))
-
+    Ans_comments = db.relationship("Comments", backref="comment_owner",cascade="all, delete, delete-orphan")
+    Ans_Votes = db.relationship("Vote", backref="vote_owner",cascade="all, delete, delete-orphan")
 
 class Comments(db.Model):
     comm_sno = db.Column(db.Integer, primary_key=True)
@@ -91,7 +92,7 @@ class Comments(db.Model):
     comment = db.Column(db.String(500))
     username = db.Column(db.String(20),db.ForeignKey("detail.username"))
     date = db.Column(db.String(15))
-
+    comm_ans_id = db.Column(db.String(20),db.ForeignKey("answers.ans_no"))
 
 class Vote(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -99,6 +100,7 @@ class Vote(db.Model):
     no = db.Column(db.Integer)
     votetype = db.Column(db.String(10))
     aq_vote = db.Column(db.String(6))
+    vote_ans_id = db.Column(db.String(20),db.ForeignKey("answers.ans_no"))
 
 # custom filters for jinja , can be used like {{some_text|replace_regex}}
 def replace_regex(given_text):
@@ -132,6 +134,12 @@ def current_user():
             return "hi"
     else:
         return 
+
+
+# error handlers
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html")
 
 
 # injecting data in layout/base file
@@ -248,12 +256,9 @@ def about():
 def profile(name):
     print(current_user(),"c")
     user = Detail.query.filter_by(username=name).first()
-    questions = Question.query.filter_by(username=name).all()
-    answers = Answers.query.filter_by(username=name).all()
     return render_template("profile.html",
-                           user=user,
-                           questions=questions,
-                           answers=answers)
+                           user=user
+                           )
     
     
 def upload_images(form_picture):
@@ -261,9 +266,6 @@ def upload_images(form_picture):
     ext = os.path.splitext(form_picture.filename)[1]
     file_path = random_hex + session["user"]+str(ext) 
 
-
-    
-    
     output_size = (125,125) 
     i = Image.open(form_picture)
     i.thumbnail = output_size
@@ -324,7 +326,8 @@ def edit_profile(name):
 def ques_page(sno, slug):
 
     ques = Question.query.filter_by(sno=sno).first() # taking question on based on sno
-
+    if not ques:
+        abort(404)
     answers = Answers.query.filter_by(ques_id=sno).order_by( # answers of the question
         Answers.real_answer.desc(), Answers.date.desc()).all() # in desednign order.
     a = []
@@ -388,7 +391,7 @@ def ques_page(sno, slug):
                     voted = Vote(username=session["user"],
                                  no=ques_no,
                                  votetype=votetype,
-                                 aq_vote=aq,vote_user=current_user())
+                                 aq_vote=aq,Vote_user=current_user(),vote_owner=Answers.query.get(ques_no))
 
                     db.session.add(voted)
                 else:
@@ -466,13 +469,14 @@ def comment():
         if request.method == "POST":
             comm = request.form.get("comment")
             sno = request.form.get("sno")
+            comment_answer = Answers.query.filter_by(ans_no=sno).first()
             print(comm)
             if comm:
         
                 comment = Comments(sno=sno,
                                    comment=comm,
                                    username=session["user"],
-                                   date=datetime.now(),comment_user=current_user())
+                                   date=datetime.now(),comment_user=current_user(),comment_owner=comment_answer)
             else:
                 comm = request.form.get("ques_comm")
                 comment = Comments(ques_sno=sno,
@@ -553,6 +557,7 @@ def delete():
                 slug = request.form.get("slug")
                 flash("Question deleted successfully", "success")
                 db.session.query(Vote).filter_by(no=sno,aq_vote="ques").delete()
+                db.session.query(Comments).filter_by(ques_sno=sno).delete()
                 db.session.delete(ques)
                 db.session.commit()
                 return redirect(url_for("index"))
@@ -563,7 +568,7 @@ def delete():
                     a = sno
                     ques = Answers.query.filter_by(ans_no=sno).first()
                     flash("Answer deleted successfully", "success")
-
+                    db.session.query(Comments).filter_by(sno=sno).delete()
                 else:
                     sno = request.args.get("delete")
                     ques = Comments.query.filter_by(comm_sno=sno).first()
