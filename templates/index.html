@@ -400,17 +400,15 @@
 
 
                 <div class="col">
-
-                    <div class="user">
-                        <a href="/profile/{{ans.username}}" class="user-a">{{
-                            ans.username }}</a>
-                        <br>
-                        <span class="Date">
-                            {{ans.date}}
-                        </span>
-                    </div>
-
-                </div>
+                <p class="user">
+                    <img src="{{ans.answer_user.pic|url_of_img}}" alt="" width=28 height=28 />
+                    <a href="/profile/{{ans.username}}" class="user-a">{{ ans.username }}</a>
+                    <br>
+                    <span class="Date">
+                        {{ans.date}}
+                    </span>
+                </p>
+            </div>
             </div>
             <button class="link-btn btns" type="button" data-bs-toggle="collapse"
                 data-bs-target="#e{{ans.ans_no}}" aria-expanded="false"

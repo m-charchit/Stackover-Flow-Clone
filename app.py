@@ -408,12 +408,18 @@ def ques_page(sno, slug):
             
             return {"user": session["user"], "type": ques.upvote} 
         # for marking accepted answer
-        if real != None:   
+        if real != None :   
             my_answer = Answers.query.filter_by(
                 ans_no=request.args.get("number")).first()
-            my_answer.real_answer = real 
-            db.session.commit() 
-            return "success" # adding the true or false and returning succes, 
+            before_request = my_answer.real_answer
+            if my_answer.username == session["user"] :
+                my_answer.real_answer = real 
+                db.session.commit() 
+                if len(Answers.query.filter_by(real_answer="true").all()) <= 1:
+                    return "success" # adding the true or false and returning succes, 
+                my_answer.real_answer = before_request
+                db.session.commit() 
+            return "If you try to do this again. You will be banned from site. " + session["user"]  
 
         if tab == "oldest":
             answers = Answers.query.filter_by(ques_id=sno).order_by(

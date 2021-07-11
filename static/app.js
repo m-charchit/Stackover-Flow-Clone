@@ -160,12 +160,14 @@ for (i = 0; i < $(".svg-icon").length; i++) {
         no_check = true
     }
 }
-console.log(no_check)
+
 if (no_check) {
     $('.svg-icon').filter(function() {
         return $(this).attr("fill") == "#bbc0c4";
     }).hide();
 }
+
+// correct answer
 $(".svg-icon").click(function(e) {
     var real = false
     if ($(this).attr("fill") == "#bbc0c4") {
@@ -196,6 +198,27 @@ $(".svg-icon").click(function(e) {
         },
     });
 });
+
+
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: `${window.location.pathname}`,
+    //     data: {
+    //         real_answer: real,
+    //         number: this.id
+    //     },
+    //     contentType: "application/json;charset=UTF-8",
+    //     success: function(response) {
+    //         if (response == "login") {
+    //             document.location.replace("/signin")
+    //         }
+    //     },
+    // });
+
+
+
+
 console.log( window.innerWidth  - $(".container").css("margin-left").replace(/[^-\d\.]/g, '') )
 $(".mce-content-body").css({
 
