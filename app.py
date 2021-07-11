@@ -248,7 +248,7 @@ def search():
 @app.route("/about")
 def about():
     print(current_user(),"b")
-    users = Detail.query.filter(Detail.username.in_(("Mrinmoy","charchit","sh"))).all()
+    users = Detail.query.filter(Detail.username.in_(("mrinmoy","charchit","sh"))).all()
     return render_template("about.html", users=users)
 
 # profile page of a person. still working

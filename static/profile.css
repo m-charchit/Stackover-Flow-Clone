@@ -1,3 +1,10 @@
+.links-container a:link{
+    transition:0.5s;
+    color:black;
+}
+.links-container a:hover{
+    color:blue;
+}
 p {
     font-size: 18px;
 }

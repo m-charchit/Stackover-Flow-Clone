@@ -12,8 +12,8 @@
 	<div class="row">
 	{% for i in users %}
 		<div class="col" style="margin-bottom: 20px;">
-			<div class="card cards" style="align-items:center; text-align: center; padding-bottom:20px;">
-				<img class="card-img-top" src="https://static.vecteezy.com/system/resources/previews/000/420/553/original/avatar-icon-vector-illustration.jpg" alt="Card image cap" style="width:300px; height:300px">
+            <div class="card cards text-center" style="align-items:center; padding-bottom:20px;">
+                <img class="card-img-top rounded-circle" src="{{i.pic|url_of_img}}" alt="Card image cap" style="width:300px; height:300px">
     <div class="card-body">
       <h5 class="card-title">{{i.username}}</h5>
         <p class="card-text">
