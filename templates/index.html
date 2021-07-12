@@ -20,7 +20,7 @@
             <form action="/comment" method="post">
                 <textarea name="{{ name }}" style="display:none;" class="text-sub" ></textarea>
                 <div class="textarea form-control"></div>
-                <input type="hidden" name="sno" value="{{ value }}">
+                <input type="hidden" name="sno" value="{{ value }}" class="A_B_C_D">
                 <button type="submit" class="btn btn-primary comm"
                     style="margin-top:20px">Post comment</button>
             </form>
@@ -213,8 +213,7 @@
         </div>
                 </div>
         {% elif ques == "ques" and slug != "0" %}
-        <input type="text" id="link" style="position:relative;top: -4000px;
-            left:-4000px">
+        <input type="text" id="link" class="A_B_C_D">
         <div class="container">
             <h2 class="title-ques">
                 <a style="color:black;" href="/{{ question.sno }}/{{'-'.join(question.title[0:40].split(' '))}}">{{question.title}}</a>
@@ -225,14 +224,14 @@
                             class="btn btn-primary btn-sm">Edit</button></a>
                     <form action="/delete" method="post"
                         style="display:inline;">
-                        <input type="hidden"
+                        <input type="hidden" class="A_B_C_D"
                             value="{{question.title}},!2{{question.sno}}"
                             name="slug">
 
                         <input type="hidden" value={{question.sno}}
-                            name="delete">
+                            name="delete" class="A_B_C_D">
                         <input type="hidden" value={{question.username}}
-                            name="userDelete">
+                            name="userDelete" class="A_B_C_D">
                         <button type="submit" class="btn btn-primary btn-sm">Delete</button>
                 </form>
 
@@ -310,11 +309,11 @@
                 {% if com.username == username %}
                 <form action="/delete" method="get" style="display:inline">
                     <input type="hidden" value={{com.username}}
-                        name="userDelete">
+                        name="userDelete" class="A_B_C_D">
                     <input type="hidden"
                         value="{{question.title}},!2{{question.sno}}"
-                        name="slug">
-                    <input type="hidden" value={{com.comm_sno}} name="delete">
+                        name="slug" class="A_B_C_D">
+                    <input type="hidden" value={{com.comm_sno}} name="delete" class="A_B_C_D">
                     <button class="link-btn btns deletecomm" type="submit">delete</button>
                 </form>
                 {% endif %}
@@ -385,11 +384,11 @@
                     <form action="/delete" method="get" style="display:
                         contents;">
                         <input type="hidden" value="{{question.title}},!2{{question.sno}}"
-                            name="slug">
+                            name="slug" class="A_B_C_D">
                         <input type="hidden" value={{ans.username}}
-                            name="userDelete">
+                            name="userDelete" class="A_B_C_D">
                         <input type="hidden" value={{ans.ans_no}}
-                            name="ans_sno">
+                            name="ans_sno" class="A_B_C_D">
                         <button type="submit" class="link-btn btns">delete</button>
                     </form>
                     {% endif %}
@@ -437,10 +436,10 @@
                 {% if com.username == username %}
                 <form action="/delete" method="get" style="display:inline">
                     <input type="hidden" value={{com.username}}
-                        name="userDelete">
+                        name="userDelete" class="A_B_C_D">
                     <input type="hidden" value="{{ans.owner.title}},!2{{ans.owner.sno}}"
-                        name="slug">
-                    <input type="hidden" value={{com.comm_sno}} name="delete">
+                        name="slug" class="A_B_C_D">
+                    <input type="hidden" value={{com.comm_sno}} name="delete" class="A_B_C_D">
                     <button class="link-btn btns deletecomm" type="submit">delete</button>
                 </form>
                 {% endif %}
@@ -505,7 +504,7 @@
         <div class="form-group" style="padding:0px 70px;">
 
             <label for="exampleFormControlTextarea1">Your Answer</label>
-            <input type="hidden" name="username" value="{{answer.username}}">
+            <input type="hidden" name="username" value="{{answer.username}}" class="A_B_C_D">
             <textarea name="answer" class="form-control" id="mytextarea"
                 rows="6"
                 style="margin:10px; border-radius:10px;">{{answer.answer}}</textarea>
@@ -515,7 +514,7 @@
     </form>
 
     {% endif %}
-    <input type="hidden" value="{{session['user']}}" id="global_session_user">
+    <input type="hidden" value="{{session['user']}}" id="global_session_user" class="A_B_C_D">
 
     {% endblock %}
     {% block script %}

@@ -368,6 +368,27 @@ def ques_page(sno, slug):
                 user_vote = Vote.query.filter_by(username=session["user"], 
                                                  no=ques_no,
                                                  aq_vote=aq).first()
+                # for adding the vote to question/answer
+                if aq == "answer": 
+                    my_ans = Answers.query.filter_by(ans_no=ques_no).first() # if answer voted update it to vote column in db
+                    print(my_ans)
+                    if user_vote:
+                        print(user_vote.votetype,"mydown")
+                        print(votetype,"yourdown")
+                        if user_vote.votetype == "downvote":
+                            my_ans.votes += 1 if votetype == "novote" else 2
+                            print(my_ans.votes,"down")
+                        else:
+                            my_ans.votes -= 1 if votetype == "novote" else 2
+                            print(my_ans.votes,"up")
+                    else:
+                        if votetype == "upvote":
+                            my_ans.votes += 1 
+                        else:
+                            my_ans.votes -= 1
+
+                else:
+                    ques.upvote = vote_no # else if question , update the question vote
                 if votetype != "novote": # if downvote,upvote add it to db
                     if not user_vote: # if vote don't exist then make a new row
                         voted = Vote(username=session["user"],
@@ -380,33 +401,7 @@ def ques_page(sno, slug):
                         user_vote.votetype = votetype # else update the earlier one
                 else:
                     db.session.delete(user_vote) # if novote then delete the row
-                # for adding the vote to question/answer
-                if aq == "answer": 
-                    my_ans = Answers.query.filter_by(ans_no=ques_no).first() # if answer voted update it to vote column in db
-                    print(my_ans)
-                    if user_vote:
-                        print(user_vote.votetype)
-                        types = user_vote
-                        if votetype == "downvote"  :
-                            if  types.votetype == "upvote":
-                                my_ans.votes -=  2 
-                            elif types.votetype == "downvote" :
-                                my_ans.votes -= 1
-                            else:
-                                my_ans.votes += 1
-                        elif votetype == "upvote" :
-
-                            if  types.votetype == "downvote":
-                                my_ans.votes +=  2 
-                            elif types.votetype == "upvote" :
-                                my_ans.votes -= 1
-                            else: 
-                                my_ans.votes += 1
-
-                else:
-                    ques.upvote = vote_no # else if question , update the question vote
                 db.session.commit()
-            
                 return {"user": session["user"], "type": ques.upvote} 
                
             else:
