@@ -359,7 +359,7 @@ def ques_page(sno, slug):
                 flash("Answer Posted Successfully")
 
             elif Voteuser :
-        
+                                 
                 if Voteuser == session["user"]: # if user voted his own ans or ques .
                     return "sameuser"
                 aq = request.form.get("type") # if question vote or answer vote
