@@ -77,7 +77,7 @@ class Question(db.Model):
 class Answers(db.Model):
     ans_no = db.Column(db.Integer, primary_key=True)
     answer = db.Column(db.String(3000))
-    votes = db.Column(db.Integer(), default=0)
+    votes = db.Column(db.Integer, default=0)
     real_answer = db.Column(db.String(5), default="false")
     date = db.Column(db.String(15))
     ques_id = db.Column(db.Integer, db.ForeignKey("question.sno"))
@@ -112,8 +112,6 @@ def list_comp(b):
     return [i.real_answer for i in b]
 
 def url_of_img(img):
-    print(img)
-    print(storage.child(img).get_url(firebase_user["idToken"]) if img != "default.jpg" else url_for('static',filename='default.jpg'))
     return storage.child(img).get_url(firebase_user["idToken"]) if img != "default.jpg" else url_for('static',filename='default.jpg')
 
 
@@ -129,7 +127,7 @@ def current_user():
         sess = session['user']
 
         with app.test_request_context('/about'):
-            print(sess)
+           
             return Detail.query.filter_by(username=sess).first()
             return "hi"
     else:
@@ -154,7 +152,7 @@ def inject_user():
 # in this I paginate , add tabs like latest or oldest, search bar which currently works with mysql and other databases only , not sqlite
 def page(tag=None):
     tab = request.args.get("tab", "latest")
-    print(tag)
+   
     #  when using sqlite comment line from this to
 
     # search = request.args.get("query")
@@ -177,7 +175,7 @@ def page(tag=None):
     if tag:
         ques = Question.query.filter(Question.tag.contains(f" {tag} ")).all() if tab == "oldest" else Question.query.filter(Question.tag.contains(f" {tag} ")).order_by(
                     Question.date.desc()).all()
-        print(ques)
+       
 
     page_num = request.args.get("page_num")
     no_of_ques = request.args.get("no_of_ques")
@@ -218,7 +216,7 @@ def page(tag=None):
 # main page , contains the question list.
 @app.route("/", methods=["GET", "POST"])
 def index():
-    print(current_user(),"a")
+   
     ques1, ques, next, prev, no_of_ques, tab = page()
     return render_template("index.html",
                            questions=ques1,
@@ -247,14 +245,14 @@ def search():
 # about page where we will add abput us
 @app.route("/about")
 def about():
-    print(current_user(),"b")
+   
     users = Detail.query.filter(Detail.username.in_(("mrinmoy","charchit","sh"))).all()
     return render_template("about.html", users=users)
 
 # profile page of a person. still working
 @app.route("/profile/<string:name>")
 def profile(name):
-    print(current_user(),"c")
+    
     user = Detail.query.filter_by(username=name).first()
     return render_template("profile.html",
                            user=user
@@ -285,7 +283,7 @@ def upload_images(form_picture):
 # page to edit one's details 
 @app.route("/users/edit/<string:name>",methods=["POST","GET"])
 def edit_profile(name):
-    print(current_user())
+
     if "user" in session:
         if session["user"] == name:
             user = Detail.query.filter_by(username=session["user"]).first()
@@ -349,7 +347,8 @@ def ques_page(sno, slug):
                                         aq_vote="answer").all()
         if request.method == "POST": # taking answer
             ansBody = request.form.get("answer")
-            if slug != "0" and slug != "comment":
+            Voteuser = request.form.get("voteuser") # name of user voted
+            if slug != "0" and slug != "comment" and ansBody:
                 answer = Answers(answer=ansBody,
                                  username=session["user"],
                                  date=datetime.now(),
@@ -358,6 +357,58 @@ def ques_page(sno, slug):
                 db.session.add(answer)
                 db.session.commit()
                 flash("Answer Posted Successfully")
+
+            elif Voteuser :
+                                 
+                if Voteuser == session["user"]: # if user voted his own ans or ques .
+                    return "sameuser"
+                aq = request.form.get("type") # if question vote or answer vote
+                votetype = request.form.get("votetype") # if downvote , upvote or novote
+                ques_no = request.form.get("ques_no") # sno of voted ans or ques
+                user_vote = Vote.query.filter_by(username=session["user"], 
+                                                 no=ques_no,
+                                                 aq_vote=aq).first()
+                if votetype != "novote": # if downvote,upvote add it to db
+                    if not user_vote: # if vote don't exist then make a new row
+                        voted = Vote(username=session["user"],
+                                     no=ques_no,
+                                     votetype=votetype,
+                                     aq_vote=aq,Vote_user=current_user(),vote_owner=Answers.query.get(ques_no))
+
+                        db.session.add(voted)
+                    else:
+                        user_vote.votetype = votetype # else update the earlier one
+                else:
+                    db.session.delete(user_vote) # if novote then delete the row
+                # for adding the vote to question/answer
+                if aq == "answer": 
+                    my_ans = Answers.query.filter_by(ans_no=ques_no).first() # if answer voted update it to vote column in db
+                    print(my_ans)
+                    if user_vote:
+                        print(user_vote.votetype)
+                        types = user_vote
+                        if votetype == "downvote"  :
+                            if  types.votetype == "upvote":
+                                my_ans.votes -=  2 
+                            elif types.votetype == "downvote" :
+                                my_ans.votes -= 1
+                            else:
+                                my_ans.votes += 1
+                        elif votetype == "upvote" :
+
+                            if  types.votetype == "downvote":
+                                my_ans.votes +=  2 
+                            elif types.votetype == "upvote" :
+                                my_ans.votes -= 1
+                            else: 
+                                my_ans.votes += 1
+
+                else:
+                    ques.upvote = vote_no # else if question , update the question vote
+                db.session.commit()
+            
+                return {"user": session["user"], "type": ques.upvote} 
+               
             else:
                 if session["user"] == request.form.get("username"): # editing answer
                     answer = Answers.query.filter_by(ans_no=sno).first()
@@ -366,47 +417,15 @@ def ques_page(sno, slug):
                     flash("Answer edited successfully","success")
                 else:
                     flash("Error could not post your answer","danger")
+   
             return redirect(
                 url_for("ques_page",
                         sno=answer.ques_id,
                         slug='-'.join(answer.owner.title[0:40].split(' '))) +
                 f"#a{answer.ans_no}") # after posting or editing redirect to the answer
         # some get request vars
-        vote_no = request.args.get("vote") # no of votes
         real = request.args.get("real_answer") # if marked as accepted or correct
         tab = request.args.get("tab")
-        Voteuser = request.args.get("voteuser") # name of user voted
-        if vote_no :
-            print(Voteuser,session["user"])
-            if Voteuser == session["user"]: # if user voted his own ans or ques .
-                return "sameuser"
-            aq = request.args.get("type") # if question vote or answer vote
-            votetype = request.args.get("votetype") # if downvote , upvote or novote
-            ques_no = request.args.get("ques_no") # sno of voted ans or ques
-            user_vote = Vote.query.filter_by(username=session["user"], 
-                                             no=ques_no,
-                                             aq_vote=aq).first()
-            if votetype != "novote": # if downvote,upvote add it to db
-                if not user_vote: # if vote don't exist then make a new row
-                    voted = Vote(username=session["user"],
-                                 no=ques_no,
-                                 votetype=votetype,
-                                 aq_vote=aq,Vote_user=current_user(),vote_owner=Answers.query.get(ques_no))
-
-                    db.session.add(voted)
-                else:
-                    user_vote.votetype = votetype # else update the earlier one
-            else:
-                db.session.delete(user_vote) # if novote then delete the row
-            # for adding the vote to question/answer
-            if aq == "answer": 
-                my_ans = Answers.query.filter_by(ans_no=ques_no).first() # if answer voted update it to vote column in db
-                my_ans.votes = vote_no 
-            else:
-                ques.upvote = vote_no # else if question , update the question vote
-            db.session.commit()
-            
-            return {"user": session["user"], "type": ques.upvote} 
         # for marking accepted answer
         if real != None :   
             my_answer = Answers.query.filter_by(
@@ -430,11 +449,10 @@ def ques_page(sno, slug):
     # authentication
     elif "user" not in session:
         if request.method == "POST": # if user is not login and try to answer or ... then send to signin page
-            flash("Login To Answer", "warning")
-            print(url_for("signin"))
-            return redirect(url_for("signin"))
-        elif request.args.get("vote"): # if voting without login then also
-            flash("Login To Vote", "warning")
+            flash("Login To continue", "warning")
+            return "login"
+        elif request.args.get("real_answer"): # if voting without login then also
+            flash("Login To mark", "warning")
             return "login"
     if "user" in session:
         if slug == "0": # if in answer edit mode return the answer 
@@ -476,7 +494,7 @@ def comment():
             comm = request.form.get("comment")
             sno = request.form.get("sno")
             comment_answer = Answers.query.filter_by(ans_no=sno).first()
-            print(comm)
+            
             if comm:
         
                 comment = Comments(sno=sno,
@@ -494,7 +512,7 @@ def comment():
             db.session.commit()
             flash("Comment added", "success")
             if request.form.get("comment"):
-                print(sno)
+                
                 answer = Answers.query.filter_by(ans_no=sno).first()
                 return redirect(
                     url_for("ques_page",

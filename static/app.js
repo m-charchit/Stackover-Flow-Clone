@@ -67,25 +67,24 @@ function handleUpvote(i,e) {
 </div>`)
     }
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: `${window.location.pathname}`,
         data: {
-            vote: matchingCount.innerHTML,
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
             voteuser:e.target.id 
         },
-        contentType: "application/json;charset=UTF-8",
+        
         success: function(response) {
-            if (response == "login") {
-                document.location.replace("/signin")
-            }
             if (response == "sameuser"){
                 
                 matchingUpSpan.style.color = "dimgray";
                 currentVote.up = false;
                 console.log("hi")
+            }
+            else if (response == "login"){
+                document.location.replace("/signin")
             }
         },
     });
@@ -133,23 +132,22 @@ function handleDownvote(i,e) {
 
     }
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: `${window.location.pathname}`,
         data: {
-            vote: matchingCount.innerHTML,
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
             voteuser:e.target.id
         },
-        contentType: "application/json;charset=UTF-8",
         success: function(res) {
             console.log(res);
             if (res == "sameuser"){
-                
-
                 matchingDownSpan.style.color = "dimgray";
                 currentVote.down = false;
+            }
+            else if (res == "login"){
+                document.location.replace("/signin")
             }
         },
     });
