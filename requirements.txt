@@ -7,5 +7,4 @@ firebase_admin==5.0.1
 Flask_SQLAlchemy==2.5.1
 beautifulsoup4==4.9.3
 Pillow==8.3.0
-pyrebase==3.0.27
 secrets==1.0.2
