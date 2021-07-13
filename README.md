@@ -31,4 +31,4 @@ search = request.args.get("query")
 
 Note - The app is still under development.
 Contact me on discord `charchit#8198` or email me at charchit.dahiya@gmail.com.
-or you can contact `Mrinmoy#0001` on discord.
+or you can contact `Mrinmoy#1412` on discord.
