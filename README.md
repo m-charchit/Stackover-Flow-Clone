@@ -9,7 +9,7 @@
 if you want to see demo, visit https://player.vimeo.com/video/562676111
 
 ## steps to buld it locally 
-1. clone or download the repo. If you have a database manager like phpmyadmin than import the sql file.
+1. clone or download the repo. If you have a database manager like phpmyadmin then import the sql file.
 2. name the database and connect it to the app by  
 ```
 app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://username:password@localhost/db_name' 
