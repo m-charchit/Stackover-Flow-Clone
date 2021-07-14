@@ -11,7 +11,7 @@ if you want to see demo, visit https://player.vimeo.com/video/562676111
 ## steps to buld it locally 
 1. clone or download the repo. If you have a database manager like phpmyadmin then import the sql file.
 2. name the database and connect it to the app by  
-```
+```python
 app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://username:password@localhost/db_name' 
 # like 'mysql://root:@localhost/site' 
 ```
@@ -20,7 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://username:password@localhost/d
 
 If using sqlite then define sqlalchemy uri by `'sqlite:///test.db'`. Follow the comments in the function page. 
 comment and uncomment the regions according to the comments. Eg. comment and uncomment these line when using sqlite
-```
+```python
 search = request.args.get("query")
     sql = text(f'select * from question where question.sno in ( select answers.sno from answers where MATCH \
         (answers.answer,answers.title) against ("{search}")) \
