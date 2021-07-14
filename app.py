@@ -8,8 +8,7 @@ from datetime import datetime
 # from sqlalchemy import text,desc
 import math
 from bs4 import BeautifulSoup # here it is used for changing html to string
-import secrets # genreate a random_hex , 
-
+import secrets # genreate a random_hex
 import pyrebase # firebase wrapper for storing iamges
 import firebase_admin # same stuff as above
 from firebase_admin import credentials, firestore # this also
@@ -36,7 +35,7 @@ app = Flask(__name__)
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://root:@localhost/test' # comment this line when using sqlite
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
 # app.config['SQLALCHEMY_DATABASE_URI'] ='mysql:// --host=13.233.108.179 --port=50544' 
 app.secret_key = 'super duper secret key'
@@ -216,7 +215,6 @@ def page(tag=None):
 # main page , contains the question list.
 @app.route("/", methods=["GET", "POST"])
 def index():
-   
     ques1, ques, next, prev, no_of_ques, tab = page()
     return render_template("index.html",
                            questions=ques1,
@@ -242,7 +240,7 @@ def search():
     # return redirect("/")
 
 
-# about page where we will add abput us
+# about page where we will add about us
 @app.route("/about")
 def about():
    
@@ -280,7 +278,7 @@ def upload_images(form_picture):
     return  file_path
     
 
-# page to edit one's details 
+# page to edit one's details. still working on it
 @app.route("/users/edit/<string:name>",methods=["POST","GET"])
 def edit_profile(name):
 
@@ -317,8 +315,6 @@ def edit_profile(name):
     abort(404)
 
 
-    
-    
     
 @app.route("/<string:sno>/<string:slug>", methods=["GET", "POST"]) # sno=question no,slug=ques_title 
 def ques_page(sno, slug):
@@ -609,7 +605,7 @@ def delete():
         return redirect("/signin")
 
 
-# login system
+#signup system
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -636,7 +632,7 @@ def signup():
             )
     return render_template("signup.html")
 
-
+#signin system
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
     if "user" in session and session["loggedin"] == True:
