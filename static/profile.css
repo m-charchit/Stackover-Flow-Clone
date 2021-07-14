@@ -1,18 +1,5 @@
-.links-container a:link{
-    transition:0.5s;
-    color:black;
-}
-.links-container a:hover{
-    color:blue;
-}
-p {
-    font-size: 18px;
-}
-body {
-    overflow-x: hidden;
-}
-.trans {
-    /* background-color:#e8f6fa; */
+/* .trans {
+    background-color:#e8f6fa;
     background-color:rgba(232, 246, 250, 0.5);
     padding: 20px;
 }
@@ -110,4 +97,4 @@ body {
     }
     
 
-}
+} */
