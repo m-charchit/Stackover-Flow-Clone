@@ -5,7 +5,7 @@ from flask_migrate import Migrate # used to update the schema of the table
 from flask import Flask, render_template, request, session, redirect, flash, url_for,abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-# from sqlalchemy import text,desc
+from sqlalchemy import text,desc,func
 import math
 from bs4 import BeautifulSoup # here it is used for changing html to string
 import secrets # genreate a random_hex
@@ -369,8 +369,6 @@ def ques_page(sno, slug):
                     my_ans = Answers.query.filter_by(ans_no=ques_no).first() # if answer voted update it to vote column in db
                     print(my_ans)
                     if user_vote:
-                        print(user_vote.votetype,"mydown")
-                        print(votetype,"yourdown")
                         if user_vote.votetype == "downvote":
                             my_ans.votes += 1 if votetype == "novote" else 2
                             print(my_ans.votes,"down")
@@ -441,7 +439,9 @@ def ques_page(sno, slug):
     elif "user" not in session:
         if request.method == "POST": # if user is not login and try to answer or ... then send to signin page
             flash("Login To continue", "warning")
-            return "login"
+            if request.form.get("voteuser"):
+                return "login"
+            return redirect("/signin")
         elif request.args.get("real_answer"): # if voting without login then also
             flash("Login To mark", "warning")
             return "login"
@@ -613,9 +613,9 @@ def signup():
         email = request.form.get("email")
         password = request.form.get("password")
         cpassword = request.form.get("cpassword")
-        contact = Detail.query.filter_by(username=name.lower()).first()
+        contact = db.session.query(Detail).filter(func.lower(Detail.username) == name.lower()).first()
         if password == cpassword and contact == None:
-            entry = Detail(username=name.lower(),
+            entry = Detail(username=name,
                            email=email,
                            password=password,
                            date=datetime.now())
@@ -642,11 +642,11 @@ def signin():
 
         username = request.form.get("username").lower()
         password = request.form.get("password")
-        contact = Detail.query.filter_by(username=username).first()
+        contact = db.session.query(Detail).filter(func.lower(Detail.username) == username).first()
 
         if contact:
 
-            if username == contact.username and password == contact.password:
+            if username == contact.username.lower() and password == contact.password:
 
                 session["user"] = contact.username
                 
