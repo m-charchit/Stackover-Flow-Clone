@@ -1,107 +1,303 @@
-{% extends "layout.html" %} {% block headcss %}
-<style>
-    .change {
-        position: relative;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: -56px;
-        background: #535a60;
-        color: var(--white);
-        text-align: center;
-        top: -38px;
-        width: 199px;
-    }
-</style>
-{% endblock %} {% block body %}
-{% with messages = get_flashed_messages(with_categories=True) %}
-{% if messages %}
-{% for cat,message in messages %}
-<div class="alert alert-{{cat}} alert-dismissible fade show" role="alert">
-  {{message}}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+<html>
 
-{% endfor %}
-{% endif %}
-{% endwith %}
-<div class="container">
-    <form
-        action="{{url_for('edit_profile', name=session['user'])}}"
-        method="post"
-        enctype="multipart/form-data">
-        <div class="row">
-            <div class="col" style="display: grid;">
-                <img
-                    src="{{user.pic|url_of_img}}"
-                    alt="Profile Image"
-                    height="200"
-                    width="200"
-                    class="border border-primary"
-                />
-                <label for="image_inp">
-                    <p type="button" class="change btn btn-secondary">Change picture</p>
-                </label>
-                <input type="file" name="pic" id="image_inp" style="display: none;" />
-            </div>
-            <div class="col">
-                
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input
-                        type="text"
-                        name="location"
-                        id="location"
-                        value="{{user.location}}"
-                        class="form-control"
-                        aria-describedby="emailHelp"
-                    />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://cdn.tiny.cloud/1/68rymc29tevtihzfrcfmvg6k14gxllt1ri28lawyvj4nz9mt/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '.textarea',
+            inline: true,
+            menubar: "edit format insert",
+            plugins: "link lists code",
+            toolbar: 'undo redo  | bold italic | link code',
+            height: "200"
+        });
+        tinymce.init({
+            selector: '#mytextarea',
+            height: "420",
+            plugins: 'help advlist link image lists code media',
+            entity_encoding: "raw",
+            branding: false
+        });
+    </script>
+    <style>
+        .change {
+            border: 2px solid black;
+            border-radius: 45px;
+            padding: 4px;
+            width: 140px;
+            transition: 0.3s;
+        }
+
+        .change:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .body a:link {
+            color: black;
+            text-decoration: none;
+        }
+
+        .body a:hover {
+            color: rgb(37, 37, 248);
+        }
+
+        .abt-below {
+            height: 12rem;
+            box-shadow: 3px 5px 14px rgb(0 0 0 / 15%);
+            overflow-y: scroll;
+        }
+
+        .abt {
+            margin-bottom: 10px;
+            overflow-y: scroll;
+            height: 15rem;
+            box-shadow: 3px 5px 14px rgb(0 0 0 / 15%);
+        }
+
+        .profile {
+            color: black;
+        }
+
+        @media screen and (max-width: 767px) {
+            .profile {
+                height: 28rem;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .profile {
+                height: 32rem;
+            }
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgb(197 197 197);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: rgb(171 166 166);
+        }
+
+        .link1 {
+            padding-right: 2px !important;
+
+            margin: 0px !important;
+        }
+
+        .link2 {
+            padding-left: 2px !important;
+            margin: 0px !important;
+        }
+
+        .side-link {
+            display: inline;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgb(197 197 197);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background-color: rgb(171 166 166);
+        }
+
+        .dropdown a:hover {
+            color: rgba(14, 14, 14, 0.74);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid mt-2">
+        <form action="{{url_for('edit_profile', name=session['user'])}}" method="post" enctype="multipart/form-data">
+            <div class="row body">
+                <!--sidebar -->
+                <div class="col-sm-2 d-md-block d-none">
+                    <div class="row mt-3 g-2 text-center">
+                        <div class="col-12 mb-3">
+                            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn3.iconfinder.com%2Fdata%2Ficons%2Fpopular-services-brands-vol-2%2F512%2Fstackoverflow-512.png&f=1&nofb=1"
+                                alt="logo" height="60" width="60">
+                        </div>
+                        <div class="col-12">
+                            <a href="#">My profile</a>
+                        </div>
+                        <div class="col-12">
+                            <a href="#">Edit profile</a>
+                        </div>
+                        <div class="col-12">
+                            <a href="#">Support</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        id="title"
-                        value = "{{user.title}}"
-                        class="form-control"
-                        aria-describedby="emailHelp"/>
+                <!-- main content -->
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col">
+                            <!-- top bar -->
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h2>Edit profile</h2>
+                                    <p>Edit your profile info</p>
+                                </div>
+                                <div class="col text-end">
+                                    <div class="dropdown">
+                                        <a class=" dropdown-toggle" href="#" id="dropdownMenuLink"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Hello John
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <li><a class="dropdown-item" href="#">Change Email</a></li>
+                                            <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                            <div class="d-md-none">
+                                                <li><a class="dropdown-item" href="#">My profile</a></li>
+                                                <li><a class="dropdown-item" href="#">Edit profile</a></li>
+                                                <li><a class="dropdown-item" href="#">Contact</a></li>
+                                            </div>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- profile photo and links -->
+                        <div class="mt-3 row row-cols-md-1 text-dark">
+                            <div class="col-12 profile shadow col-md-5 text-center mb-md-0 mb-2">
+                                <img height=150px width=150px
+                                    src="https://static.vecteezy.com/system/resources/previews/000/420/553/original/avatar-icon-vector-illustration.jpg"
+                                    class="border border-dark rounded-circle" id="myImg">
+                                <div class="col">
+                                    <label for="image_upload">
+                                        <p type="button" class="mt-2 change">Change picture</p>
+                                    </label>
+                                    <input type="file" name="pic" id="image_upload" style="display: none;" />
+                                </div>
+                                <div class="row row-cols-md-1 g-3">
+                                    <div class="col">
+                                        <input pattern="[a-z0-9]" class="form-control text-center"
+                                            value="{{user.username}}" required></input>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control text-center" value="{{user.title}}"></input>
+                                    </div>
+                                </div>
+                                <!-- social media links -->
+                                <div class="row row-cols-1 row-cols-sm-2 g-2 mt-2">
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1"><i
+                                                    class="fab fa-github"></i></span>
+                                            <input type="text" class="form-control" placeholder="Github Username"
+                                                aria-label="Username" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1"><i
+                                                    class="fab fa-linkedin-in"></i></span>
+                                            <input type="text" class="form-control" placeholder="LinkedIn Username"
+                                                aria-label="Username" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1"><i
+                                                    class="fab fa-twitter"></i></span>
+                                            <input type="text" class="form-control" placeholder="Twitter Username"
+                                                aria-label="Username" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1"><i
+                                                    class="fas fa-globe"></i></span>
+                                            <input type="url" class="form-control" placeholder="Website url"
+                                                aria-label="website url" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-7">
+                                <div class="row ms-md-1 my-sm-0">
+                                    <!--about-->
+                                    <div class="col-12 text-dark abt rounded py-2">
+                                        <h2>About</h2>
+                                        <textarea style="width:100%;height: 75%;resize: none;"
+                                            class="form-control">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+                                    </div>
+                                    <!-- lang and education -->
+                                    <div class="col-12 abt-below text-dark rounded py-3 px-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p><strong>languages:</strong> <input placeholder="python,cpp,swift"
+                                                        class="form-control">
+                                            </div>
+                                            <div class="col"><strong>education:</strong> <input class="form-control"
+                                                    type="text" placeholder="best degree, best university"></div>
+                                            </p>
+                                            <div class="col">
+                                                <p><strong>languages:</strong> <input placeholder="python,cpp,swift"
+                                                        class="form-control">
+                                            </div>
+                                            <div class="col"><strong>education:</strong> <input class="form-control"
+                                                    type="text" placeholder="best degree, best university"></div>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group" style="width: 100%;">
-                <label for="exampleFormControlTextarea1">About Me</label>
-                <textarea
-                    name="about"
-                    class="form-control"
-                    id="mytextarea"
-                    rows="6"
-                    style="margin: 10px; border-radius: 10px;">
-                    {{user.about}}</textarea>
-            </div>
-        </div>
+        </form>
+    </div>
+    <script src="{{url_for('static',filename='app.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        window.addEventListener('load', function () {
+            document.querySelector('input[type="file"]').addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    var img = document.getElementById('myImg');
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    }
 
-        <div class="form-group row" style="justify-content: space-between;">
-            <div class="col" style="padding: 10px;">
-                <label for="ex1">Website link</label>
-                <input class="form-control" value="{{user.website_link}}" name="website" id="ex1" type="text" />
-            </div>
-            <div class="col" style="padding: 10px;">
-                <label for="ex2">Twitter Link</label>
-                <input class="form-control" id="ex2" value="{{user.twitter}}" name="twitter" type="text" />
-            </div>
-            <div class="col" style="padding: 10px;">
-                <label for="ex3">LinkedIn link</label>
-                <input class="form-control" id="ex3" value="{{user.linkedin}}" type="text" name="linkedin" />
-            </div>
-            <div class="col" style="padding: 10px;">
-                <label for="ex3">Github link</label>
-                <input class="form-control" id="ex3" type="text" value="{{user.github_username}}" name="github" />
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+                    img.src = URL.createObjectURL(this.files[0]);
+                }
+            });
+        });
+    </script>
+</body>
 
-{% endblock %}
+</html>
