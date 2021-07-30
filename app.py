@@ -12,12 +12,12 @@ import secrets # genreate a random_hex
 import pyrebase # firebase wrapper for storing iamges
 import firebase_admin # same stuff as above
 from firebase_admin import credentials, firestore # this also
-from config import config
+from config import config,buc
 
 # firebase configuration 
 cred = credentials.Certificate("private.json")
 admin = firebase_admin.initialize_app(cred, {
-      'storageBucket': 'photo-61c49.appspot.com/'})
+      'storageBucket': buc})
 
 
 
