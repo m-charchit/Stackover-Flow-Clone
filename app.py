@@ -35,8 +35,8 @@ app = Flask(__name__)
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
 # app.config['SQLALCHEMY_DATABASE_URI'] ='mysql:// --host=13.233.108.179 --port=50544' 
 app.secret_key = 'super duper secret key'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -91,7 +91,7 @@ class Comments(db.Model):
     comment = db.Column(db.String(500))
     username = db.Column(db.String(20),db.ForeignKey("detail.username"))
     date = db.Column(db.String(15))
-    comm_ans_id = db.Column(db.String(20),db.ForeignKey("answers.ans_no"))
+    comm_ans_id = db.Column(db.Integer,db.ForeignKey("answers.ans_no"))
 
 class Vote(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -99,7 +99,7 @@ class Vote(db.Model):
     no = db.Column(db.Integer)
     votetype = db.Column(db.String(10))
     aq_vote = db.Column(db.String(6))
-    vote_ans_id = db.Column(db.String(20),db.ForeignKey("answers.ans_no"))
+    vote_ans_id = db.Column(db.Integer,db.ForeignKey("answers.ans_no"))
 
 # custom filters for jinja , can be used like {{some_text|replace_regex}}
 def replace_regex(given_text):
@@ -154,18 +154,18 @@ def page(tag=None):
    
     #  when using sqlite comment line from this to
 
-    # search = request.args.get("query")
-    # sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
-    #     (answers.answer) against ("{search}")) \
-    #     or match (title,body) against ("{search}")   order by date Desc ')
-    # sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
-    #     (answers.answer) against ("{search}") )or  match (title,body) against ("{search}")') \
-    #     if tab == "oldest" else sql
-    # result = db.engine.execute(sql).fetchall()
+    search = request.args.get("query")
+    sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
+        (answers.answer) against ("{search}")) \
+        or match (title,body,tag) against ("{search}")    order by date Desc ')
+    sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
+        (answers.answer) against ("{search}") )or  match (title,body) against ("{search}")') \
+        if tab == "oldest" else sql
+    result = db.engine.execute(sql).fetchall()
 
     # till here
 
-    search = False  # uncomment this when only using sqlite
+    # search = False  # uncomment this when only using sqlite
     if tab == "oldest":
         ques = result if search else Question.query.filter_by().all()
     else:
@@ -186,10 +186,10 @@ def page(tag=None):
     if page_num == None:
         page_num = 0
 
-    # try: # comment the whole try and except statement
-    #     page_num = int(page_num)
-    # except:
-    #     abort(404) # till here when when using sqlite
+    try: # comment the whole try and except statement
+        page_num = int(page_num)
+    except:
+        abort(404) # till here when when using sqlite
 
     last = math.ceil(len(ques) / no_of_ques) - 1
     ques1 = ques[page_num * no_of_ques:(page_num + 1) * no_of_ques]
@@ -206,10 +206,8 @@ def page(tag=None):
         next = f"page_num={page_num+1}"
         prev = f"page_num={page_num-1}"
 
-    if (page_num > last and not search
-        ) or not str(page_num).isnumeric():  # comment when using sqlite
-        pass
-        # abort(404) # when when using sqlite
+    # if (page_num > last and not search) or not str(page_num).isnumeric():  # comment when using sqlite
+    #     abort(404) # when when using sqlite
     return ques1, ques, next, prev, no_of_ques, tab 
 
 # main page , contains the question list.
@@ -544,7 +542,7 @@ def question(sno):
                 ques.title = questitle
                 ques.body = quesbody
                 ques.tag = questag
-                ques.question_user = current_user
+                ques.question_user = current_user()
                 db.session.commit()
                 flash("Question Edited successfully", "success")
             return redirect(
