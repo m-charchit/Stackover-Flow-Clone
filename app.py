@@ -5,7 +5,7 @@ from flask_migrate import Migrate # used to update the schema of the table
 from flask import Flask, render_template, request, session, redirect, flash, url_for,abort
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy import text,desc
+from sqlalchemy import text,desc,func
 import math
 from bs4 import BeautifulSoup # here it is used for changing html to string
 import secrets # genreate a random_hex
