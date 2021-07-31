@@ -1,40 +1,32 @@
-# A stack over flow clone made with flask. 
+# A Stackover Flow clone made with flask.
 
-## prerequisites
-#### python3 on windows on linux.
-#### flask installed on a virtual environment or globally
-#### install all required modules from requirements.txt
+## Prerequisites
+#### 1. python3 on windows or linux.
+#### 2. Flask (virtual environment or globally)
+#### 3. install all required modules from requirements.txt
 
-## Demo
-if you want to see demo, visit https://player.vimeo.com/video/562676111
+#
 
 ## steps to buld it locally 
-1. clone or download the repo. If you have a database manager like phpmyadmin then import the sql file.
+1. clone or download the repo.
 2. name the database and connect it to the app by  
 ```python
 app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://username:password@localhost/db_name' 
 # like 'mysql://root:@localhost/site' 
 ```
+#
 
-##### Note - app search feature can't be used with sqlite. It can be used with mySQL or PostgreSQL.
+If using sqlite then define sqlalchemy uri by 
+```bash
+'sqlite:///test.db'
+``` 
+Follow the comments in the function page. 
+comment and uncomment the regions according to the comments. 
+<br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this link to see the website [localhost:5000](localhost:5000)
 
-If using sqlite then define sqlalchemy uri by `'sqlite:///test.db'`. Follow the comments in the function page. 
-comment and uncomment the regions according to the comments. Eg. comment and uncomment these line when using sqlite
-```python
-search = request.args.get("query")
-    sql = text(f'select * from question where question.sno in ( select answers.sno from answers where MATCH \
-        (answers.answer,answers.title) against ("{search}")) \
-        or match (title,body) against ("{search}")   order by date Desc ')
-    sql = text(f'select * from question where question.sno in ( select answers.sno from answers where MATCH \
-        (answers.answer,answers.title) against ("{search}") )or  match (title,body) against ("{search}")') \
-        if tab == "oldest" else sql
-    result = db.engine.execute(sql).fetchall()
-    
-    # search = False # uncomment this when only using sqlite
-```
-3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this link to see the website [localhost:5000](localhost:5000)
-
-Note - The app is still under development. We are thinking of releasing it on 17th july.
-## Contact
+Note - The app is still under development. So you may see some bugs.
+## Contributing
+Contributions are highly appreciated. If you want to contribute first fork the repo. And then make your changes. Now make a pull request stating the changes you made. We will review it and if it looks good to us we will accept it and merge.
+## Contacting
 You can contact `charchit#8198` on discord or email at charchit.dahiya@gmail.com.
 or contact `Mrinmoy#1412` on discord.

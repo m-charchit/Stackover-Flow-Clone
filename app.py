@@ -160,12 +160,10 @@ def inject_user():
         return dict(login=False)
 
 # function to maintain the main questions answers page. 
-# in this I paginate , add tabs like latest or oldest, search bar which currently works with mysql and other databases only , not sqlite
+# in this I paginate , add tabs like latest or oldest
 def page(tag=None):
     tab = request.args.get("tab", "latest")
    
-    
-
     search = request.args.get("query")
     if search:
         list_answer = [i.ques_id for i in Answers.query.filter().msearch(search,fields=['answer']).all()]
@@ -215,9 +213,9 @@ def page(tag=None):
         next = f"page_num={page_num+1}"
         prev = f"page_num={page_num-1}"
 
-    if (page_num > last and not search and len(ques) != 0) or not str(page_num).isnumeric():  # comment when using sqlite
+    if (page_num > last and not search and len(ques) != 0) or not str(page_num).isnumeric():  
         pass
-        abort(404) # when when using sqlite
+        abort(404)
     return ques1, ques, next, prev, no_of_ques, tab 
 
 # main page , contains the question list.
