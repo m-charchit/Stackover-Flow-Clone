@@ -12,6 +12,7 @@ import secrets # genreate a random_hex
 import pyrebase # firebase wrapper for storing iamges
 import firebase_admin # same stuff as above
 from firebase_admin import credentials, firestore # this also
+from flask_msearch import Search
 from config import config,buc
 
 # firebase configuration 
@@ -35,13 +36,15 @@ app = Flask(__name__)
 
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
 # app.config['SQLALCHEMY_DATABASE_URI'] ='mysql:// --host=13.233.108.179 --port=50544' 
 app.secret_key = 'super duper secret key'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db,render_as_batch=True)
+search = Search(db=db)
+search.init_app(app)
 
 #  table detail to store user details
 class Detail(db.Model):
@@ -64,6 +67,8 @@ class Detail(db.Model):
 
 
 class Question(db.Model):
+    __tablename__ = 'question'
+    __searchable__ = ['title', 'body','tag','username']
     sno = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     body = db.Column(db.String(80000))
@@ -74,6 +79,8 @@ class Question(db.Model):
     username = db.Column(db.String(20), db.ForeignKey("detail.username"))
 
 class Answers(db.Model):
+    __tablename__ = 'answers'
+    __searchable__ = ['answer']
     ans_no = db.Column(db.Integer, primary_key=True)
     answer = db.Column(db.String(3000))
     votes = db.Column(db.Integer, default=0)
@@ -84,7 +91,12 @@ class Answers(db.Model):
     Ans_comments = db.relationship("Comments", backref="comment_owner",cascade="all, delete, delete-orphan")
     Ans_Votes = db.relationship("Vote", backref="vote_owner",cascade="all, delete, delete-orphan")
 
+    def __repr__(self):
+        return f"{self.ques_id}"
+
 class Comments(db.Model):
+    __tablename__ = 'comments'
+    __searchable__ = ['comment']
     comm_sno = db.Column(db.Integer, primary_key=True)
     sno = db.Column(db.Integer)
     ques_sno = db.Column(db.Integer)
@@ -152,20 +164,17 @@ def inject_user():
 def page(tag=None):
     tab = request.args.get("tab", "latest")
    
-    #  when using sqlite comment line from this to
+    
 
-    # search = request.args.get("query")
-    # sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
-    #     (answers.answer) against ("{search}")) \
-    #     or match (title,body) against ("{search}")   order by date Desc ')
-    # sql = text(f'select * from question where question.sno in ( select answers.ques_id from answers where MATCH \
-    #     (answers.answer) against ("{search}") )or  match (title,body) against ("{search}")') \
-    #     if tab == "oldest" else sql
-    # result = db.engine.execute(sql).fetchall()
+    search = request.args.get("query")
+    if search:
+        list_answer = [i.ques_id for i in Answers.query.filter().msearch(search,fields=['answer']).all()]
+        l_com_ques = [i.ques_sno for i in Comments.query.filter().msearch(search,fields=['comment']).all()]
+        l_com_ans = [i.sno for i in Comments.query.filter().msearch(search,fields=['comment']).all()]
+        result = Question.query.filter().msearch(search,fields=['title', 'body','tag','username']).all() or\
+        db.session.query(Question).filter((Question.sno.in_(list_answer) | Question.sno.in_(l_com_ans) | Question.sno.in_(l_com_ques))).all() 
+    
 
-    # till here
-
-    search = False  # uncomment this when only using sqlite
     if tab == "oldest":
         ques = result if search else Question.query.filter_by().all()
     else:
@@ -186,10 +195,10 @@ def page(tag=None):
     if page_num == None:
         page_num = 0
 
-    # try: # comment the whole try and except statement
-    #     page_num = int(page_num)
-    # except:
-    #     abort(404) # till here when when using sqlite
+    try:
+        page_num = int(page_num)
+    except:
+        abort(404) 
 
     last = math.ceil(len(ques) / no_of_ques) - 1
     ques1 = ques[page_num * no_of_ques:(page_num + 1) * no_of_ques]
@@ -206,8 +215,7 @@ def page(tag=None):
         next = f"page_num={page_num+1}"
         prev = f"page_num={page_num-1}"
 
-    if (page_num > last and not search
-        ) or not str(page_num).isnumeric():  # comment when using sqlite
+    if (page_num > last and not search and len(ques) != 0) or not str(page_num).isnumeric():  # comment when using sqlite
         pass
         abort(404) # when when using sqlite
     return ques1, ques, next, prev, no_of_ques, tab 
