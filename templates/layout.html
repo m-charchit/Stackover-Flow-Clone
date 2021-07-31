@@ -81,7 +81,6 @@
                   </div>
               </li>
                 
-<<<<<<< HEAD
               
               {% endif %}
               </ul>
@@ -92,35 +91,6 @@
           </div>
         </div>
       </nav>
-=======
-                {% else %}
-          <li class="nav-item">
-                    <a class="nav-link" href="/ques/0">Ask Question</a>
-                </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Profile
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="/profile/{{session['user']}}">My Profile</a>
-                    <a class="dropdown-item" href="/users/edit/{{session['user']}}">Edit Profile</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/logout">Logout</a>
-            </div>
-        </li>
-          
-        
-        {% endif %}
-        </ul>
-      <form class="d-flex" action="/search" method="GET" >
-        <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-      
->>>>>>> 9261bfabaa5ff85f958402f55854c3670adf16ba
  
     <!-- navbar end -->
     {% block body %}{% endblock %}
