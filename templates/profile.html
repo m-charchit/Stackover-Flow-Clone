@@ -4,13 +4,13 @@
             position: relative;
             top: -59px;
         }
-        .body a:link {
+        .body a{
             color: black;
             text-decoration: none;
         }
 
         .body a:hover  {
-            color: blue;
+            color: rgb(40, 40, 255);
         }
 
         .abt-below {
@@ -23,6 +23,8 @@
             margin-bottom: 10px;
             overflow-y:scroll; 
             height:15rem;
+            padding-left: 5%;
+            padding-top: 2%;
             box-shadow: 3px 5px 14px rgb(0 0 0 / 20%);
         }
         .profile{
@@ -101,10 +103,10 @@
                     <div class="col-12 mb-3">
                         <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn3.iconfinder.com%2Fdata%2Ficons%2Fpopular-services-brands-vol-2%2F512%2Fstackoverflow-512.png&f=1&nofb=1" alt="logo" height="60" width="60"></div>
                     <div class="col-12">
-                        <a href="#">My profile</a>
+                        <a href="/profile/{{session['user']}}">My profile</a>
                     </div>
                     <div class="col-12">
-                        <a href="#">Edit profile</a>
+                        <a href="/users/edit/{{session['user']}}">Edit profile</a>
                     </div>
                     <div class="col-12">
                         <a href="#">Support</a>
@@ -117,14 +119,13 @@
                     <div class="col">
                         <!-- top bar -->
                         <div class="row align-items-center">
-                            <div class="col">
+                            <div class="col h6">
                                 <h2>My profile</h2>
-                                <p>welcome to {{user.username}}'s profile</p>
+                                <h6>welcome to {{user.username}}'s profile</h6>
                             </div>
                             <div class="col text-end">
                                 <div class="dropdown">
-                                    <a class=" dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Hello {{user.username}}
+                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Hello {{user.username}}
                                     </a>
                                   
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -136,7 +137,7 @@
                                       <li><a class="dropdown-item" href="#">Contact</a></li>
                                       </div>
                                       <li><hr class="dropdown-divider"></li>
-                                      <li><a class="dropdown-item" href="#">Logout</a></li>
+                                      <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                     </ul>
                                   </div>
                             </div>
@@ -144,24 +145,24 @@
                     </div>
                     <!-- profile photo and links -->
                     <div class="mt-5 row row-cols-sm-1 text-dark">
-                        <div class="col-12 profile shadow col-md-5 text-center rounded mb-md-0 mb-2">
-                            <img height=130px width=130px
+                        <div class="col-12 profile shadow col-md-5 text-center rounded mb-md-0 mb-2 h6">
+                            <img height=150px width=150px
                                 src="{{user.pic|url_of_img}}"
                                 class="rounded-circle border pfp border-dark">
                             <h1>{{user.username}}</h1>
                             <p>{{user.title}}</p>
                             <div class="row row-cols-2 g-2 justify-content-end">
-                                <div class="col">
-                                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                                <div class="col h5">
+                                    <a target="_blank" rel="noopenner" href="https://github.com/{{user.github_username}}"><i class="fab fa-github"></i> GitHub</a>
                                 </div>
-                                <div class="col">
-                                    <a href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                                <div class="col h5">
+                                    <a target="_blank" rel="noopenner" href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
                                 </div>
-                                <div class="col">
-                                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                                <div class="col h5">
+                                    <a target="_blank" rel="noopenner" href="https://twitter.com/{{user.twitter}}"><i class="fab fa-twitter"></i> Twitter</a>
                                 </div>
-                                <div class="col">
-                                    <a href="#"><i class="fas fa-globe"></i> Website</a>
+                                <div class="col h5">
+                                    <a target="_blank" rel="noopenner" href="{{user.website_link}}"><i class="fas fa-globe"></i> Website</a>
                                 </div>
                             </div>
                         </div>
@@ -169,22 +170,11 @@
                             <div class="row ms-md-1 my-sm-0">
                                 <!--about-->
                                 <div class="col-12 text-dark abt rounded">
-                                    <h1>about</h1>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.</p>
+                                    <h1>About</h1>
+                                    <p>{{user.about}}</p>
                                 </div>
                                 <!-- lang and education -->
                                 <div class="col-12 abt-below text-dark rounded p-2">
-                                    <p>languages: <strong>python,cpp,swift</strong><br>
-                                        education: <strong>best degree, best university</strong>
-                                    </p>
-                                    <p>languages: <strong>python,cpp,swift</strong><br>
-                                        education: <strong>best degree, best university</strong>
-                                    </p>
                                     <p>languages: <strong>python,cpp,swift</strong><br>
                                         education: <strong>best degree, best university</strong>
                                     </p>

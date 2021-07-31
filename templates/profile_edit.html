@@ -2,9 +2,8 @@
     <style>
         .change {
             border: 2px solid black;
-            border-radius: 45px;
             padding: 4px;
-            width: 140px;
+            width: 145px;
             transition: 0.3s;
         }
 
@@ -13,13 +12,13 @@
             color: white;
         }
 
-        .body a:link {
+        .body a {
             color: black;
             text-decoration: none;
         }
 
         .body a:hover {
-            color: rgb(37, 37, 248);
+            color: rgb(40, 40, 255);
         }
 
         .abt-below {
@@ -67,7 +66,6 @@
 
         .link1 {
             padding-right: 2px !important;
-
             margin: 0px !important;
         }
 
@@ -142,7 +140,7 @@
                                     <div class="dropdown">
                                         <a class=" dropdown-toggle" href="#" id="dropdownMenuLink"
                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                            Hello John
+                                            Hello {{user.username}}
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <li><a class="dropdown-item" href="#">Change Email</a></li>
@@ -164,15 +162,16 @@
                         <!-- profile photo and links -->
                         <div class="mt-3 row row-cols-md-1 text-dark">
                             <div class="col-12 profile shadow col-md-5 text-center mb-md-0 mb-2">
-                                <img height=150px width=150px
+                                <img height=145px width=145px
                                     src="{{user.pic|url_of_img}}"
-                                    class="border border-dark rounded-circle" id="myImg">
+                                    class="border border-dark" id="myImg">
                                 <div class="col">
                                     <label for="image_upload">
                                         <p type="button" class="mt-2 change">Change picture</p>
                                     </label>
                                     <input type="file" name="pic" id="image_upload" style="display: none;" />
                                 </div>
+                                
                                 <div class="row row-cols-md-1 g-3">
                                     <div class="col">
                                         <input class="form-control text-center"
@@ -189,7 +188,7 @@
                                             <span class="input-group-text" id="basic-addon1"><i
                                                     class="fab fa-github"></i></span>
                                             <input type="text" class="form-control" name="github" placeholder="Github Username"
-                                                aria-label="Username" aria-describedby="basic-addon1">
+                                                aria-label="Username" aria-describedby="basic-addon1" value="{{user.github_username}}">
                                         </div>
                                     </div>
                                     <div class="col">
@@ -197,7 +196,7 @@
                                             <span class="input-group-text" id="basic-addon1"><i
                                                     class="fab fa-linkedin-in"></i></span>
                                             <input type="text" class="form-control" name="linkedin" placeholder="LinkedIn Username"
-                                                aria-label="Username" aria-describedby="basic-addon1">
+                                                aria-label="Username" aria-describedby="basic-addon1" value="{{user.linkedin}}">
                                         </div>
                                     </div>
                                     <div class="col">
@@ -205,7 +204,7 @@
                                             <span class="input-group-text" id="basic-addon1"><i
                                                     class="fab fa-twitter"></i></span>
                                             <input type="text" class="form-control" name="twitter" placeholder="Twitter Username"
-                                                aria-label="Username" aria-describedby="basic-addon1">
+                                                aria-label="Username" aria-describedby="basic-addon1" value="{{user.twitter}}">
                                         </div>
                                     </div>
                                     <div class="col">
@@ -213,7 +212,7 @@
                                             <span class="input-group-text" id="basic-addon1"><i
                                                     class="fas fa-globe"></i></span>
                                             <input type="url" name="website" class="form-control" placeholder="Website url"
-                                                aria-label="website url" aria-describedby="basic-addon1">
+                                                aria-label="website url" aria-describedby="basic-addon1" value="{{user.website_link}}">
                                         </div>
                                     </div>
                                 </div>
@@ -229,20 +228,6 @@
                                     <!-- lang and education -->
                                     <div class="col-12 abt-below text-dark rounded py-3 px-3">
                                         <div class="row">
-                                            <div class="col">
-                                                <p><strong>languages:</strong> <input placeholder="python,cpp,swift"
-                                                        class="form-control">
-                                            </div>
-                                            <div class="col"><strong>education:</strong> <input class="form-control"
-                                                    type="text" placeholder="best degree, best university"></div>
-                                            </p>
-                                            <div class="col">
-                                                <p><strong>languages:</strong> <input placeholder="python,cpp,swift"
-                                                        class="form-control">
-                                            </div>
-                                            <div class="col"><strong>education:</strong> <input class="form-control"
-                                                    type="text" placeholder="best degree, best university"></div>
-                                            </p>
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
