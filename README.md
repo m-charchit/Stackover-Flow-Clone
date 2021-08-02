@@ -20,8 +20,7 @@ If using sqlite then define sqlalchemy uri by
 ```bash
 'sqlite:///test.db'
 ``` 
-Follow the comments in the function page. 
-comment and uncomment the regions according to the comments. 
+
 <br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this link to see the website [localhost:5000](localhost:5000)
 
 Note - The app is still under development. So you may see some bugs.
