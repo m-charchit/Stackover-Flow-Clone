@@ -386,7 +386,7 @@ def ques_page(sno, slug):
                             my_ans.votes -= 1
 
                 else:
-                    ques.upvote = vote_no # else if question , update the question vote
+                    pass
                 if votetype != "novote": # if downvote,upvote add it to db
                     if not user_vote: # if vote don't exist then make a new row
                         voted = Vote(username=session["user"],
