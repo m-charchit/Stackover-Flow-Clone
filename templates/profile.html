@@ -2,7 +2,8 @@
     <style>
         .pfp{
             position: relative;
-            top: -59px;
+            top: -49px;
+            border-radius: 15px;
         }
         .body a{
             color: black;
@@ -148,7 +149,7 @@
                         <div class="col-12 profile shadow col-md-5 text-center rounded mb-md-0 mb-2 h6">
                             <img height=150px width=150px
                                 src="{{user.pic|url_of_img}}"
-                                class="rounded-circle border pfp border-dark">
+                                class="border pfp border-dark">
                             <h1>{{user.username}}</h1>
                             <p>{{user.title}}</p>
                             <div class="row row-cols-2 g-2 justify-content-end">

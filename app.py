@@ -249,7 +249,7 @@ def search():
 @app.route("/about")
 def about():
    
-    users = Detail.query.filter(Detail.username.in_(("mrinmoy","charchit","sh"))).all()
+    users = Detail.query.filter(Detail.username.in_(("mrinmoy","charchit"))).all()
     return render_template("about.html", users=users)
 
 # profile page of a person. still working
@@ -283,7 +283,7 @@ def upload_images(form_picture):
     return  file_path
     
 
-# page to edit one's details. still working on it
+# page to edit profile details. still working on it
 @app.route("/users/edit/<string:name>",methods=["POST","GET"])
 def edit_profile(name):
 
