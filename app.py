@@ -36,13 +36,12 @@ app = Flask(__name__)
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # comment this line when using sqlite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # uncomment when using sqlite
-# app.config['SQLALCHEMY_DATABASE_URI'] ='mysql:// --host=13.233.108.179 --port=50544' 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # uncomment this line when using Mysql
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # comment this when using sqlite
 app.secret_key = 'super duper secret key'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
-migrate = Migrate(app, db,render_as_batch=True)
+migrate = Migrate(app, db,render_as_batch=True) # not working for now
 search = Search(db=db)
 search.init_app(app)
 
