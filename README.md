@@ -21,7 +21,7 @@ If using sqlite then define sqlalchemy uri by
 'sqlite:///test.db'
 ``` 
 
-<br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this link to see the website [localhost:5000](localhost:5000)
+<br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this [link](http://localhost:5000) to see the website
 
 Note - The app is still under development. So you may see some bugs.
 ## Contributing
