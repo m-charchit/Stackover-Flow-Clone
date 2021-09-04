@@ -1,0 +1,12 @@
+config= {
+  "apiKey": "your api key",
+  "authDomain": "your auth domain",
+  "projectId": "your project id",
+  "storageBucket": "your storage bucket link",
+  "messagingSenderId": "messaging sender id",
+  "appId": "your app id",
+  "measurementId": "your measurment id",
+   "databaseURL": "n"
+}
+
+buc = "your storage bucket link"
