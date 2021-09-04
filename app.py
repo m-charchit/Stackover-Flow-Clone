@@ -31,13 +31,12 @@ password = "123456"
 firebase_user = auth.sign_in_with_email_and_password(email, password)
 
 
-
 app = Flask(__name__)
 
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/test' # uncomment this line when using Mysql
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'  # comment this when using sqlite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # comment this when using sqlite
 app.secret_key = 'super duper secret key'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -48,6 +47,7 @@ search.init_app(app)
 #  table detail to store user details
 class Detail(db.Model):
     username = db.Column(db.String(20), primary_key=True, nullable=False)
+    uid = db.Column(db.String(35))
     email = db.Column(db.String(25), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(30))
