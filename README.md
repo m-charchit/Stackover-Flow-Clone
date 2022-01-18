@@ -1,17 +1,17 @@
-# A Stackover Flow clone made with flask.
+## A Stackover Flow clone made with flask.
 
 ## Prerequisites
-#### 1. python3 on windows or linux.
-#### 2. Flask (virtual environment or globally)
-#### 3. install all required modules from requirements.txt
+- python3 on windows or linux.
+- Flask
+- install all required modules from requirements.txt
 
 #
 
-## steps to buld it locally 
+## steps to run it locally 
 1. clone or download the repo.
 2. name the database and connect it to the app by  
 ```python
-app.config['SQLALCHEMY_DATABASE_URI'] =   'mysql://username:password@localhost/db_name' 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/db_name' 
 # like 'mysql://root:@localhost/site' 
 ```
 #
@@ -21,7 +21,7 @@ If using sqlite then define sqlalchemy uri by
 'sqlite:///test.db'
 ``` 
 
-<br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit this [link](http://localhost:5000) to see the website
+<br>3. Start the app using `python app.py` The app will start on `localhost:5000`. You can change it on app.py. Visit [localhost:5000](http://localhost:5000) to see the website
 
 Note - The app is still under development. So you may see some bugs.
 ## Contributing
