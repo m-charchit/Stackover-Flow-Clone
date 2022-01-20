@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block headcss %}
-<link rel="stylesheet" href='{{url_for("static",filename="about.css")}}'> 
+<link rel="stylesheet" href='{{url_for("static",filename="css/about.css")}}'> 
 {% endblock %}
 
 {% block body %} 
@@ -13,7 +13,7 @@
 	{% for i in users %}
 		<div class="col" style="margin-bottom: 20px;">
             <div class="card cards text-center" style="align-items:center; padding:20px;">
-                <img class="card-img-top" src="{{i.pic|url_of_img}}" alt="Card image cap" style="width:260px; height:260px; border-radius: 35px;">
+                <img class="card-img-top" src="{{i.pic|get_img}}" alt="Card image cap" style="width:260px; height:260px; border-radius: 35px;">
     <div class="card-body">
       <h5 class="card-title">{{i.username}}</h5>
         <p class="card-text">

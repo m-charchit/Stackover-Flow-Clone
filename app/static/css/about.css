@@ -1,0 +1,14 @@
+.devs{
+    display: flex;
+}
+.cards{
+  transition: 0.5s;
+}
+.cards:hover {
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.253);
+  color: #383a94;
+}
+
+.heading{
+  margin-bottom: 20px;
+}
