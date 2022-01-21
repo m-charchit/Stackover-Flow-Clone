@@ -3,7 +3,6 @@
         .pfp{
             position: relative;
             top: -49px;
-            border-radius: 15px;
         }
         .body a{
             color: black;
@@ -11,22 +10,17 @@
         }
 
         .body a:hover  {
-            color: rgb(40, 40, 255);
+            color: rgb(85, 85, 85);
         }
 
         .abt-below {
             height: 12rem;
-            box-shadow: 3px 5px 14px rgb(0 0 0 / 20%);
             overflow-y: scroll;
         }
 
         .abt {
-            margin-bottom: 10px;
             overflow-y:scroll; 
             height:15rem;
-            padding-left: 5%;
-            padding-top: 2%;
-            box-shadow: 3px 5px 14px rgb(0 0 0 / 20%);
         }
         .profile{
             color:black;
@@ -35,20 +29,6 @@
             .profile{
                 height: 23rem;
             }
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgb(197 197 197);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            border-radius: 10px;
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb:active {
-            background-color: rgb(171 166 166);
         }
 
         .link1 {
@@ -100,7 +80,7 @@
         <div class="row body">
             <!--sidebar -->
             <div class="col-sm-2 d-md-block d-none">
-                <div class="row mt-3 g-2 text-center">
+                <div class="row mt-3 g-2 ms-5">
                     <div class="col-12 mb-3">
                         <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn3.iconfinder.com%2Fdata%2Ficons%2Fpopular-services-brands-vol-2%2F512%2Fstackoverflow-512.png&f=1&nofb=1" alt="logo" height="60" width="60"></div>
                     <div class="col-12">
@@ -126,7 +106,7 @@
                             </div>
                             <div class="col text-end">
                                 <div class="dropdown">
-                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Hello {{user.username}}
+                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-mdb-toggle="dropdown" aria-expanded="false">Hello {{user.username}}
                                     </a>
                                   
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -149,20 +129,20 @@
                         <div class="col-12 profile shadow col-md-5 text-center rounded mb-md-0 mb-2 h6">
                             <img height=150px width=150px
                                 src="{{user.pic|get_img}}"
-                                class="border pfp border-dark">
+                                class="border border-2 rounded-circle pfp border-dark">
                             <h1>{{user.username}}</h1>
                             <p>{{user.title}}</p>
-                            <div class="row row-cols-2 g-2 justify-content-end">
-                                <div class="col h5">
+                            <div class="row row-cols-2 g-2">
+                                <div class="col">
                                     <a target="_blank" rel="noopenner" href="https://github.com/{{user.github_username}}"><i class="fab fa-github"></i> GitHub</a>
                                 </div>
-                                <div class="col h5">
+                                <div class="col">
                                     <a target="_blank" rel="noopenner" href="#"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
                                 </div>
-                                <div class="col h5">
+                                <div class="col">
                                     <a target="_blank" rel="noopenner" href="https://twitter.com/{{user.twitter}}"><i class="fab fa-twitter"></i> Twitter</a>
                                 </div>
-                                <div class="col h5">
+                                <div class="col">
                                     <a target="_blank" rel="noopenner" href="{{user.website_link}}"><i class="fas fa-globe"></i> Website</a>
                                 </div>
                             </div>
@@ -170,12 +150,13 @@
                         <div class="col-12 col-md-7">
                             <div class="row ms-md-1 my-sm-0">
                                 <!--about-->
-                                <div class="col-12 text-dark abt rounded">
+                                <div class="col-12 text-dark abt rounded-3 mb-3 shadow pt-3">
                                     <h1>About</h1>
                                     <p>{{user.about}}</p>
                                 </div>
                                 <!-- lang and education -->
-                                <div class="col-12 abt-below text-dark rounded p-2">
+                                <div class="col-12 text-dark abt-below rounded-3 shadow pt-3">
+                                    <h2>Other info</h2>
                                     <p>languages: <strong>python,cpp,swift</strong><br>
                                         education: <strong>best degree, best university</strong>
                                     </p>
