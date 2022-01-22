@@ -68,7 +68,7 @@ function handleUpvote(i,e) {
     }
     $.ajax({
         type: "POST",
-        url: `${window.location.pathname}`,
+        url: "/cast_vote",
         data: {
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
@@ -133,7 +133,7 @@ function handleDownvote(i,e) {
     }
     $.ajax({
         type: "POST",
-        url: `${window.location.pathname}`,
+        url: "/cast_vote",
         data: {
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
@@ -214,7 +214,10 @@ $(".svg-icon").click(function(e) {
     //     },
     // });
 
-
+    $(".textarea").on("input",function(){
+        $(this).prev().val(tinyMCE.activeEditor.getContent())
+        console.log($(this).prev().val())
+    })
 
 
 console.log( window.innerWidth  - $(".container").css("margin-left").replace(/[^-\d\.]/g, '') )

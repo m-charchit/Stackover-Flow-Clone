@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container px-5 py-5">
+
+    {% if sno == "0" %}
+    {% set name = "Add" %}
+    {% else %}
+    {% set name = "Edit" %}
+    {% endif %}
+    <script>
+        if (window.location.pathname.includes("/ques/0")){
+
+        }
+        else{
+            if ("{{question.username}}" != "{{username}}"){
+                window.location.replace("/")
+            }
+        }
+    </script>
+    <form action="/ques/{{sno}}" method="post">
+        <h1 class="display-4 text-center">
+            Ask a question
+        </h1>
+        <div class="row row-cols-1">
+        <div class="col">
+            <label for="exampleFormControlInput1">Title</label>
+            <input name="questitle" type="text" class="form-control mt-3"
+                value="{{question.title}}" placeholder="Be specific about your question"
+                required>
+        </div>
+
+        <div class="col mt-3">
+            <label for="exampleFormControlTextarea1">Body</label>
+            <div class="mt-3">
+            <textarea name="quesbody" class="form-control" id="mytextarea"
+                rows="8">{{question.body}}</textarea>
+            </div>
+        </div>
+
+        <div class="col mt-3 mb-3">
+            <label for="exampleFormControlInput1">Tags</label>
+            <input name="questag" type="text" class="form-control mt-3" id="tagedit"
+                value="{{question.tag}}" placeholder="add tags separated by spaces. eg. flask css python">
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{name}} Question</button>
+    </form>
+</div>
+
+{% endblock %} 
+{% block script %}
+<script>
+    a = $("#tagedit").val().trim()
+    $("#tagedit").val(a)
+</script>
+{% endblock script %}

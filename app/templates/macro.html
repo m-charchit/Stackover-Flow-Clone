@@ -1,0 +1,29 @@
+{% macro replace(num,action="/search/",name="Questions")  %}
+<h4 style="margin-bottom:-26px;">{{num}} {{name}}</h4>
+    <button style="float:right; margin-left:5px;" class="oldest btn
+        btn-sm btn-primary">oldest</button>
+    <button style="float:right; margin-left:5px;" class="oldest btn
+        btn-sm btn-primary">latest</button>
+        <script>
+            $(".oldest").click(function (e) {
+                url_manager("tab",$(this).text())
+            })
+        </script>
+{% endmacro %} 
+
+
+{% macro post_comment(value,id="question",name="ques_comm") %}
+<div class="container">
+    <div class="collapse" id="{{ id }}">
+        <div class="card card-body">
+            <form action="/comment" method="post">
+                <textarea name="{{ name }}" style="display:none;" class="text-sub" ></textarea>
+                <div class="textarea form-control"></div>
+                <input type="hidden" name="sno" value="{{ value }}" class="A_B_C_D">
+                <button type="submit" class="btn btn-primary comm"
+                    style="margin-top:20px">Post comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endmacro %}

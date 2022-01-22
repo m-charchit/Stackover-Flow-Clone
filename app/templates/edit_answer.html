@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %} 
+
+<script>
+    if (window.location.pathname.endsWith("/0/") ){
+        if ("{{username|safe}}" == "{{answer.username|safe}}"){
+            console.log("hi")
+        }
+        else{
+            console.log("bye")
+            window.location.replace("/")
+        }
+    }
+</script>
+
+<form action="/edit_answer/{{sno}}" method="post">
+    <div class="form-group" style="padding:0px 70px;">
+
+        <label for="exampleFormControlTextarea1">Your Answer</label>
+        <input type="hidden" name="username" value="{{answer.username}}" class="A_B_C_D">
+        <textarea name="answer" class="form-control" id="mytextarea"
+            rows="6"
+            style="margin:10px; border-radius:10px;">{{answer.answer}}</textarea>
+        <button type="submit" class="btn btn-primary" style="margin: 10px;">Post Answer</button>
+    </div>
+
+</form>
+{% endblock %}

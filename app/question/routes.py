@@ -85,8 +85,7 @@ def Ques(sno):
                 url_for("main.ques_page",
                         sno=ques.sno,
                         slug='-'.join(ques.title[0:40].split(' '))))
-        return render_template("index.html",
-                               ques=True,
+        return render_template("question.html",
                                sno=sno,
                                question=question,
                                username=session["user"])

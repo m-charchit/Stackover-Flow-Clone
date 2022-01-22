@@ -1,0 +1,322 @@
+{% extends "layout.html" %}
+{% block body %} 
+
+{% include "flash.html" %}
+<script>
+    function load_more(ids,myid,myclass){
+        
+        $('div').filter(function() {
+
+        return parseInt( this.id.replace(`${myid}-`,''), 10) > 5;
+      }).hide();
+      $('hr').filter(function() {
+        return parseInt( this.className.replace(`${myclass}-`,''), 10) > 5;
+        }).hide();
+      
+      $(`.${ids}`).click(function (){ 
+          $(this).prevAll().show()
+            $(this).hide()
+        })}
+</script>
+<div id="show_popups"></div>
+{% import 'macro.html' as macro %}
+<input type="text" id="link" class="A_B_C_D">
+<div class="container">
+    <h2 class="title-ques">
+        <a style="color:black;" href="/{{ question.sno }}/{{'-'.join(question.title[0:40].split(' '))}}">{{question.title}}</a>
+        <div class="edit-delete">
+            {% if question.username ==session["user"] %}
+
+            <a href="/ques/{{ question.sno }}"><button type="button"
+                    class="btn btn-primary btn-sm">Edit</button></a>
+            <form action="/delete" method="post"
+                style="display:inline;">
+                <input type="hidden" class="A_B_C_D"
+                    value="{{question.title}},!2{{question.sno}}"
+                    name="slug">
+
+                <input type="hidden" value={{question.sno}}
+                    name="delete" class="A_B_C_D">
+                <input type="hidden" value={{question.username}}
+                    name="userDelete" class="A_B_C_D">
+                <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+        </form>
+
+        {% endif %}
+        <button type="button" class="btn btn-primary btn-sm" data-bs-container="body" data-toggle="popover" data-placement="right" data-bs-content="Link Copied!!">
+Share
+</button>
+            
+    </div>
+
+</h2>
+<hr>
+<div class="grid_ques">
+    
+<div style="grid-column:1; margin-right: 10px"> <div class="vote">
+    {% if ques_vote %}
+            
+    {% if ques_vote.votetype == "upvote"  %}
+    {% set upvote = "#3CBC8D" %}
+    {% elif ques_vote.votetype == "downvote" %}
+    {% set downvote = "#3CBC8D" %}
+    {% endif %}
+    {% endif %}
+        
+    <span class="up-vote" id="{{ question.username }}" style="color:{{upvote}}" ><i class="fas fa-angle-up" id="{{ question.username }}"></i></span>
+    <span class="number" id="number_{{question.sno}}">{{question.upvote}}</span>
+    <span class="down-vote"  id="{{ question.username }}"  style='color:{{downvote}}'><i class="fas fa-angle-down" id="{{ question.username }}"></i></span>
+  </div></div>
+<div style="grid-column:2">{{question.body | safe}}
+<div class="row">
+    <div class="col">
+        {% for tag in question.tag.split(" ") %}
+        {% if tag != "" %}
+
+        <p class="tag ptag"><a href="/tag/{{ tag }}">{{ tag }}</a> </p>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col">
+        <p class="user">
+            <img src="{{question.question_user.pic|get_img}}" alt="" width=28 height=28 />
+            <a href="/profile/{{question.username}}" class="user-a">{{ question.username }}</a>
+            <br>
+            <span class="Date">
+                {{question.date}}
+            </span>
+        </p>
+    </div>
+</div>
+
+<button class="link-btn btns" type="button" data-bs-toggle="collapse"
+    data-bs-target="#question" aria-expanded="false"
+    aria-controls="collapseExample">
+    Add comment
+</button>
+    
+</div>
+    
+
+</div>
+<div class="container" style="font-size: 13px; line-height: 18px;">
+    <hr style="margin-top: 0.3rem; margin-bottom:0.3rem;">
+
+    {% for com in comment %}
+
+    <div class="commentdiv" id="myids-{{loop.index}}">
+<div class="comment">
+        {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
+        </a> on {{com.date}}
+        </div>
+
+        {% if com.username ==session["user"] %}
+        <form action="/delete" method="get" style="display:inline">
+            <input type="hidden" value={{com.username}}
+                name="userDelete" class="A_B_C_D">
+            <input type="hidden"
+                value="{{question.title}},!2{{question.sno}}"
+                name="slug" class="A_B_C_D">
+            <input type="hidden" value={{com.comm_sno}} name="delete" class="A_B_C_D">
+            <button class="link-btn btns deletecomm" type="submit">delete</button>
+        </form>
+        {% endif %}
+
+    </div>
+    <hr class="myclasse-{{loop.index}}" style="margin-top: 0.3rem;
+        margin-bottom:0.3rem;">
+    {% endfor %}
+    {% if comment|length > 5 %}
+    <button id="load1" class="load1 btns link-btn" style="color:
+        #007bff;">Load More</button>
+    <script>
+        load_more("load1","myids","myclasse")
+    </script>
+    {% endif %}
+
+</div>
+{{ macro.post_comment(question.sno) }}
+
+
+
+{% set a = '/' + question.sno|string+'/'+'-'.join(question.title[0:40].split(' '))+'/' %}
+{{  macro.replace(answers|length,a,"Answers")}}
+
+<hr>
+{% if answers %}
+{% for ans in answers %}
+<div class="grid_ques my_an">
+    <div style="grid-column:1"><div class="vote">
+        {% set b = namespace(up="",down="") %}
+        {% if ans_vote %}
+        {% for _vote in ans_vote %}
+        {% if _vote.no == ans.ans_no and _vote.aq_vote == "answer" %}
+        {% if _vote.votetype == "upvote"  %}
+        {% set b.up = "#3CBC8D" %}
+        {% elif _vote.votetype == "downvote" %}
+        {% set b.down = "#3CBC8D" %}
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        <span class="up-vote" id="{{ ans.username }}" style="color:{{b.up}}"><i class="fas fa-angle-up" id="{{ ans.username }}"></i></span>
+        <span class="number" id="number_{{ans.ans_no}}" >{{ans.votes}}</span>
+        <span class="down-vote" id="{{ ans.username }}" style="color:{{b.down}}"><i class="fas fa-angle-down" id="{{ ans.username }}"></i></span>
+        {% if session["user"] == question.username %}
+        {% if ans.real_answer == "true" %}
+        <svg aria-hidden="true" id="{{ans.ans_no}}" class="svg-icon iconCheckmarkLg" width="36" height="36" viewBox="0 0 36 36" fill="#48a868"><path d="m6 14 8 8L30 6v8L14 30l-8-8v-8z"></path></svg>
+        {% else %}
+        <svg aria-hidden="true" id="{{ans.ans_no}}" class="svg-icon iconCheckmarkLg" width="36" height="36" viewBox="0 0 36 36" fill="#bbc0c4"><path d="m6 14 8 8L30 6v8L14 30l-8-8v-8z"></path></svg>
+        {% endif %}
+        {% else  %}
+        {% if ans.real_answer == "true" %}
+        <svg aria-hidden="true"  width="36" height="36" viewBox="0 0 36 36" fill="#48a868"><path d="m6 14 8 8L30 6v8L14 30l-8-8v-8z"></path></svg>
+            {% endif %}
+        {% endif %}
+      </div></div>
+<div class="container" style="grid-column:2" id="a{{ans.ans_no}}">
+    <div id="tinymce" class="mce-content-body"data-id="mce_7"
+        contenteditable="false" spellcheck="false"
+        style="line-height:20px;">
+        {{ ans.answer |safe }}
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if ans.username == session["user"] %}
+            <a id="ans_edit" class="btns" href="/edit_answer/{{question.sno}}">Edit</a>
+
+            <form action="/delete" method="get" style="display:
+                contents;">
+                <input type="hidden" value="{{question.title}},!2{{question.sno}}"
+                    name="slug" class="A_B_C_D">
+                <input type="hidden" value={{ans.username}}
+                    name="userDelete" class="A_B_C_D">
+                <input type="hidden" value={{ans.ans_no}}
+                    name="ans_sno" class="A_B_C_D">
+                <button type="submit" class="link-btn btns">delete</button>
+            </form>
+            {% endif %}
+             <button type="button" class="link-btn btns share" id="#a{{ans.ans_no}}" data-bs-container="body" data-toggle="popover" data-placement="right" data-bs-content="Link Copied!!">
+Share
+</button>
+        </div>
+
+
+        <div class="col">
+        <p class="user">
+            <img src="{{ans.answer_user.pic|get_img}}" alt="" width=28 height=28 />
+            <a href="/profile/{{ans.username}}" class="user-a">{{ ans.username }}</a>
+            <br>
+            <span class="Date">
+                {{ans.date}}
+            </span>
+        </p>
+    </div>
+    </div>
+    <button class="link-btn btns" type="button" data-bs-toggle="collapse"
+        data-bs-target="#e{{ans.ans_no}}" aria-expanded="false"
+        aria-controls="collapseExample">
+        Add comment
+    </button>
+</div>
+</div>
+<div class="container" style="font-size: 13px; line-height: 18px;">
+    <hr style="margin-top: 0.3rem; margin-bottom:0.3rem;">
+
+
+    {% if comments %}
+    {% set b= namespace(print="false") %}
+
+    {% set a = namespace(length=0) %}
+    {% for comment in comments %}
+    {% for com in comment %}
+    {% if ans.ans_no == com.sno %}
+    <div class="commentdiv" id="myid-{{loop.index}}" style="display:flex;">
+        <div class="comment">
+        {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
+        </a> on {{com.date}}
+            
+        </div>
+        {% if com.username == session["user"] %}
+        <form action="/delete" method="get" style="display:inline">
+            <input type="hidden" value={{com.username}}
+                name="userDelete" class="A_B_C_D">
+            <input type="hidden" value="{{ans.owner.title}},!2{{ans.owner.sno}}"
+                name="slug" class="A_B_C_D">
+            <input type="hidden" value={{com.comm_sno}} name="delete" class="A_B_C_D">
+            <button class="link-btn btns deletecomm" type="submit">delete</button>
+        </form>
+        {% endif %}
+        {% set a.length = comment|length %}
+        {% if comment|length >2 %}
+        {% block script1 %}
+        <script>
+                load_more("load","myid","myclass")
+            </script>
+        {% endblock script1 %}
+        {% endif %}
+    </div>
+    <hr class="myclass-{{loop.index}}" style="margin-top: 0.3rem;
+        margin-bottom:0.3rem;">
+    {% endif %}
+    {% endfor %}
+    {% if b.print == "false" and a.length >5 %}
+    <button id="load" class="load btns link-btn" style="color: rgb(0,
+        123, 255);">Load More</button>
+    {% set b.print = "true" %}
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
+    {{ macro.post_comment(ans.ans_no,"e"+ans.ans_no|string,"comment") }}
+
+<hr style="margin-top: 2rem !important;">
+{% endfor %}
+
+{% endif %}
+
+<form action="/post_answer/{{question.sno}}" method="post">
+    <div class="form-group" style="padding:0px 70px;">
+
+        <label for="exampleFormControlTextarea1">Your Answer</label>
+        <textarea name="answer" class="form-control" id="mytextarea" rows="6" style="margin:10px; border-radius:10px;"></textarea>
+        <button type="submit" class="btn btn-primary"
+            style="margin:10px;">Post Answer</button>
+    </div>
+
+</form>
+
+</div>
+<input type="hidden" value="{{session['user']}}" id="global_session_user" class="A_B_C_D">
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        
+        /*var popoverTriggerList = [].slice.call( document.querySelectorAll( '[data-toggle="popover"]' ) );
+        var popoverList = popoverTriggerList.map( function( popoverTrigger )
+        {
+            return new bootstrap.Popover( popoverTrigger );
+        } );*/
+            
+        
+        $("#share").click(function (){
+            $("#link").val(window.location.href);
+            $("#link").select();
+            document.execCommand("copy");
+            $("#link").val("");
+        })
+        $(document).on("click",".share",function (e){
+            loc = window.location.href ? window.location.href.split("#")[0] : window.location.href;
+            $("#link").val(`${loc}${e.target.id}`);
+            $("#link").select();
+            document.execCommand("copy");
+            $("#link").val("");
+            
+        })
+
+    })
+    
+</script>
+
+{% endblock script %}
