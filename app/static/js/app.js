@@ -1,4 +1,3 @@
-
 const up_vote_spans = document.getElementsByClassName("up-vote");
 const down_vote_spans = document.getElementsByClassName("down-vote");
 const count = document.getElementsByClassName("number");
@@ -9,26 +8,28 @@ for (let i = 0; i < count.length; i += 1) {
     if (up_vote_spans[i].style.color == "rgb(60, 188, 141)") {
         votes[i] = {
             up: true,
-            down: false
+            down: false,
         };
     } else if (down_vote_spans[i].style.color == "rgb(60, 188, 141)") {
         votes[i] = {
             up: false,
-            down: true
+            down: true,
         };
     } else {
         votes[i] = {
             up: false,
-            down: false
+            down: false,
         };
     }
-    thisUpVoteSpan.addEventListener("click", handleUpvote.bind( this,i), false);
-    thisDownVoteSpan.addEventListener("click", handleDownvote.bind( this,i), false);
+    thisUpVoteSpan.addEventListener("click", handleUpvote.bind(this, i), false);
+    thisDownVoteSpan.addEventListener(
+        "click",
+        handleDownvote.bind(this, i),
+        false
+    );
 }
 
-function handleUpvote(i,e) {
-    
-    
+function handleUpvote(i, e) {
     const currentVote = votes[i];
     const matchingUpSpan = up_vote_spans[i];
     const matchingDownSpan = down_vote_spans[i];
@@ -40,31 +41,31 @@ function handleUpvote(i,e) {
         type = "ques";
     }
     var ifvote = "novote";
-    if (e.target.id != $("#global_session_user").val()){
-    if (currentVote.down) {
-        matchingCount.innerHTML = currentCount + 2;
-    } else if (currentVote.up === false) {
-        matchingCount.innerHTML = currentCount + 1;
+    if (e.target.id != $("#global_session_user").val()) {
+        if (currentVote.down) {
+            matchingCount.innerHTML = currentCount + 2;
+        } else if (currentVote.up === false) {
+            matchingCount.innerHTML = currentCount + 1;
+        } else {
+            matchingCount.innerHTML = currentCount - 1;
+        }
+        if (!currentVote.up) {
+            console.log(currentVote.up, currentVote.down);
+            matchingUpSpan.style.color = "#3CBC8D";
+            matchingDownSpan.style.color = "dimgray";
+            currentVote.up = true;
+            currentVote.down = false;
+            ifvote = "upvote";
+        } else {
+            matchingUpSpan.style.color = "dimgray";
+            currentVote.up = false;
+        }
     } else {
-        matchingCount.innerHTML = currentCount - 1;
-    }
-    if (!currentVote.up) {
-        console.log(currentVote.up, currentVote.down);
-        matchingUpSpan.style.color = "#3CBC8D";
-        matchingDownSpan.style.color = "dimgray";
-        currentVote.up = true;
-        currentVote.down = false;
-        ifvote = "upvote";
-    } else {
-        matchingUpSpan.style.color = "dimgray";
-        currentVote.up = false;
-    }
-    }
-    else{
-        $("#show_popups").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
+        $("#show_popups")
+            .append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
   <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-</div>`)
+</div>`);
     }
     $.ajax({
         type: "POST",
@@ -73,25 +74,22 @@ function handleUpvote(i,e) {
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
-            voteuser:e.target.id 
+            voteuser: e.target.id,
         },
-        
-        success: function(response) {
-            if (response == "sameuser"){
-                
+
+        success: function (response) {
+            if (response == "sameuser") {
                 matchingUpSpan.style.color = "dimgray";
                 currentVote.up = false;
-                console.log("hi")
-            }
-            else if (response == "login"){
-                document.location.replace("/signin")
+                console.log("hi");
+            } else if (response == "login") {
+                document.location.replace("/signin");
             }
         },
     });
 }
 
-function handleDownvote(i,e) {
-    
+function handleDownvote(i, e) {
     const currentVote = votes[i];
     const matchingUpSpan = up_vote_spans[i];
     const matchingDownSpan = down_vote_spans[i];
@@ -103,33 +101,30 @@ function handleDownvote(i,e) {
         type = "ques";
     }
     var ifvote = "novote";
-    if (e.target.id != $("#global_session_user").val()){
-
-    
-    if (currentVote.up) {
-        matchingCount.innerHTML = currentCount - 2;
-    } else if (currentVote.down === false) {
-        matchingCount.innerHTML = currentCount - 1;
+    if (e.target.id != $("#global_session_user").val()) {
+        if (currentVote.up) {
+            matchingCount.innerHTML = currentCount - 2;
+        } else if (currentVote.down === false) {
+            matchingCount.innerHTML = currentCount - 1;
+        } else {
+            matchingCount.innerHTML = currentCount + 1;
+        }
+        if (!currentVote.down) {
+            matchingDownSpan.style.color = "#3CBC8D";
+            matchingUpSpan.style.color = "dimgray";
+            currentVote.down = true;
+            currentVote.up = false;
+            ifvote = "downvote";
+        } else {
+            matchingDownSpan.style.color = "dimgray";
+            currentVote.down = false;
+        }
     } else {
-        matchingCount.innerHTML = currentCount + 1;
-    }
-    if (!currentVote.down) {
-        matchingDownSpan.style.color = "#3CBC8D";
-        matchingUpSpan.style.color = "dimgray";
-        currentVote.down = true;
-        currentVote.up = false;
-        ifvote = "downvote";
-    } else {
-        matchingDownSpan.style.color = "dimgray";
-        currentVote.down = false;
-    }
-    }
-    else{
-         $("#show_popups").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
+        $("#show_popups")
+            .append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
   <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-</div>`)
-
+</div>`);
     }
     $.ajax({
         type: "POST",
@@ -138,97 +133,113 @@ function handleDownvote(i,e) {
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
-            voteuser:e.target.id
+            voteuser: e.target.id,
         },
-        success: function(res) {
+        success: function (res) {
             console.log(res);
-            if (res == "sameuser"){
+            if (res == "sameuser") {
                 matchingDownSpan.style.color = "dimgray";
                 currentVote.down = false;
-            }
-            else if (res == "login"){
-                document.location.replace("/signin")
+            } else if (res == "login") {
+                document.location.replace("/signin");
             }
         },
     });
 }
-var no_check = false
+var no_check = false;
 for (i = 0; i < $(".svg-icon").length; i++) {
     if ($(".svg-icon").eq(i).attr("fill") == "#48a868") {
-        no_check = true
+        no_check = true;
     }
 }
 
 if (no_check) {
-    $('.svg-icon').filter(function() {
-        return $(this).attr("fill") == "#bbc0c4";
-    }).hide();
+    $(".svg-icon")
+        .filter(function () {
+            return $(this).attr("fill") == "#bbc0c4";
+        })
+        .hide();
 }
 
 // correct answer
-$(".svg-icon").click(function(e) {
-    var real = false
+$(".svg-icon").click(function (e) {
+    var real = false;
     if ($(this).attr("fill") == "#bbc0c4") {
         $(this).attr("fill", "#48a868");
-        real = true
-        $('.svg-icon').filter(function() {
-            return this.id != e.currentTarget.id;
-        }).hide();
+        real = true;
+        $(".svg-icon")
+            .filter(function () {
+                return this.id != e.currentTarget.id;
+            })
+            .hide();
     } else {
         $(this).attr("fill", "#bbc0c4");
-        real = false
-        $('.svg-icon').filter(function() {
-            return this.id != e.currentTarget.id;
-        }).show();
+        real = false;
+        $(".svg-icon")
+            .filter(function () {
+                return this.id != e.currentTarget.id;
+            })
+            .show();
     }
     $.ajax({
         type: "GET",
         url: `${window.location.pathname}`,
         data: {
             real_answer: real,
-            number: this.id
+            number: this.id,
         },
         contentType: "application/json;charset=UTF-8",
-        success: function(response) {
+        success: function (response) {
             if (response == "login") {
-                document.location.replace("/signin")
+                document.location.replace("/signin");
             }
         },
     });
 });
 
+// $.ajax({
+//     type: "GET",
+//     url: `${window.location.pathname}`,
+//     data: {
+//         real_answer: real,
+//         number: this.id
+//     },
+//     contentType: "application/json;charset=UTF-8",
+//     success: function(response) {
+//         if (response == "login") {
+//             document.location.replace("/signin")
+//         }
+//     },
+// });
 
+$(".textarea").on("input", function () {
+    $(this).prev().val(tinyMCE.activeEditor.getContent());
+    console.log($(this).prev().val());
+});
 
-    // $.ajax({
-    //     type: "GET",
-    //     url: `${window.location.pathname}`,
-    //     data: {
-    //         real_answer: real,
-    //         number: this.id
-    //     },
-    //     contentType: "application/json;charset=UTF-8",
-    //     success: function(response) {
-    //         if (response == "login") {
-    //             document.location.replace("/signin")
-    //         }
-    //     },
-    // });
-
-    $(".textarea").on("input",function(){
-        $(this).prev().val(tinyMCE.activeEditor.getContent())
-        console.log($(this).prev().val())
-    })
-
-
-console.log( window.innerWidth  - $(".container").css("margin-left").replace(/[^-\d\.]/g, '') )
+console.log(
+    window.innerWidth -
+        $(".container")
+            .css("margin-left")
+            .replace(/[^-\d\.]/g, "")
+);
 $(".mce-content-body").css({
-
-    "width": window.innerWidth  -( $(".container").css("margin-right").replace(/[^-\d\.]/g, '') *2 +60  )
-  })
-$(window).resize(function() {
+    width:
+        window.innerWidth -
+        ($(".container")
+            .css("margin-right")
+            .replace(/[^-\d\.]/g, "") *
+            2 +
+            60),
+});
+$(window).resize(function () {
     $(".mce-content-body").css({
-        "width": window.innerWidth  - ( $(".container").css("margin-right").replace(/[^-\d\.]/g, '')*2 +60) 
-    })
-})
-
-
+        width:
+            window.innerWidth -
+            ($(".container")
+                .css("margin-right")
+                .replace(/[^-\d\.]/g, "") *
+                2 +
+                60),
+    });
+});
