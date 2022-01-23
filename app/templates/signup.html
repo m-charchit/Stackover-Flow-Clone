@@ -4,8 +4,8 @@
 {% if messages %}
 {% for cat,message in messages %}
 <div class="alert alert-{{cat}} alert-dismissible fade show" role="alert">
-  {{message}}
-  <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+    {{message}}
+    <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
 </div>
 
 {% endfor %}
@@ -16,29 +16,32 @@
     <h1 class="text-center display-4">Sign Up</h1>
     <form action="/signup" method="POST">
         <div class="row mb-3">
-          <div class="col">
-            <label for="name">Username</label>
-            <input type="name" name="username" id="name" class="form-control" aria-describedby="emailHelp" required maxlength="11">
-          </div>
-          <div class="col-sm mt-3 mt-sm-0">
-            <label for="email">Email address</label>
-            <input type="email" name="email" id="email" class="form-control" aria-describedby="emailHelp" required maxlength="30">
-            <small id="emailHelp" class="form-text text-muted">We will not share your email with anyone. Email might be used in future for authenticating purposes.</small>
-          </div>
+            <div class="col">
+                <label for="name">Username</label>
+                <input type="name" name="username" id="name" class="form-control" aria-describedby="emailHelp" required
+                    maxlength="11">
+            </div>
+            <div class="col-sm mt-3 mt-sm-0">
+                <label for="email">Email address</label>
+                <input type="email" name="email" id="email" class="form-control" aria-describedby="emailHelp" required
+                    maxlength="30">
+                <small id="emailHelp" class="form-text text-muted">We will not share your email with anyone. Email might
+                    be used in future for authenticating purposes.</small>
+            </div>
         </div>
-      <div class="mb-3 row">
-          <div class="col">
-              <label for="pass">Password</label>
-              <input type="password" class="form-control" id="pass" name="password" required minlength="8">
-          </div>
-        <div class="col-sm mb-3 mt-3 mt-sm-0">
-            <label for="confirmpass">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmpass" name="cpassword" required>
+        <div class="mb-3 row">
+            <div class="col">
+                <label for="pass">Password</label>
+                <input type="password" class="form-control" id="pass" name="password" required minlength="8">
+            </div>
+            <div class="col-sm mb-3 mt-3 mt-sm-0">
+                <label for="confirmpass">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmpass" name="cpassword" required>
+            </div>
+            <div class="col-12 text-center text-sm-start">
+                <button type="submit" class="btn btn-primary text-center" name="submit" value="Submit">Submit</button>
+            </div>
         </div>
-          <div class="col-12 text-center text-sm-start">
-              <button type="submit" class="btn btn-primary text-center" name="submit" value="Submit">Submit</button>
-          </div>
-      </div>
     </form>
-  </div>
-  {% endblock %}
+</div>
+{% endblock %}
