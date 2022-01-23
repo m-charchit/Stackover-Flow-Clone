@@ -63,7 +63,7 @@ function handleUpvote(i,e) {
     else{
         $("#show_popups").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
 </div>`)
     }
     $.ajax({
@@ -127,7 +127,7 @@ function handleDownvote(i,e) {
     else{
          $("#show_popups").append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
 </div>`)
 
     }
