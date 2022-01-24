@@ -25,7 +25,7 @@ def post_answer(ques_id):
     
     answer = Answers(answer=ansBody,
                     username=session["user"],
-                    date=datetime.now(),
+                    date=datetime.strftime(datetime.now(),"%d-%m-%y"),
                     owner=ques,
                     answer_user=Detail.query.filter_by(username=session["user"]).first())
     db.session.add(answer)

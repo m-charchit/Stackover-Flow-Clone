@@ -25,13 +25,13 @@ def comment():
                 comment = Comments(sno=sno,
                                    comment=comm,
                                    username=session["user"],
-                                   date=datetime.now(),comment_user=Detail.query.filter_by(username=session["user"]).first(),comment_owner=comment_answer)
+                                   date=datetime.strftime(datetime.now(),"%d-%m-%y"),comment_user=Detail.query.filter_by(username=session["user"]).first(),comment_owner=comment_answer)
             else:
                 comm = request.form.get("ques_comm")
                 comment = Comments(ques_sno=sno,
                                    comment=comm,
                                    username=session["user"],
-                                   date=datetime.now(),comment_user=Detail.query.filter_by(username=session["user"]).first())
+                                   date=datetime.strftime(datetime.now(),"%d-%m-%y"),comment_user=Detail.query.filter_by(username=session["user"]).first())
             answer = Question.query.filter_by(sno=sno).first()
             db.session.add(comment)
             db.session.commit()
@@ -68,7 +68,7 @@ def Ques(sno):
                                 body=quesbody,
                                 tag=questag,
                                 username=session["user"],
-                                date=datetime.now(), question_user=Detail.query.filter_by(username=session["user"]).first())
+                                date=datetime.strftime(datetime.now(),"%d-%m-%y"), question_user=Detail.query.filter_by(username=session["user"]).first())
                 db.session.add(ques)
                 db.session.commit()
 
