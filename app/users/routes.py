@@ -23,7 +23,7 @@ def profile(name):
                            user=user
                            )
 # page to edit profile details. still working on it
-@users.route("/users/edit/<string:name>",methods=["POST","GET"])
+@users.route("/profile/edit/<string:name>",methods=["POST","GET"])
 def edit_profile(name):
 
     if "user" in session:
