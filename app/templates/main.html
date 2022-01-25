@@ -106,7 +106,7 @@ Share
 
     <div class="commentdiv" id="myids-{{loop.index}}">
 <div class="comment">
-        {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
+        {{com.comment|safe}} -<p></p><a href="/profile/{{com.username}}">{{com.username}}
         </a> on {{com.date}}
         </div>
 
@@ -233,7 +233,7 @@ Share
     {% if ans.ans_no == com.sno %}
     <div class="commentdiv" id="myid-{{loop.index}}" style="display:flex;">
         <div class="comment">
-        {{com.comment|safe}} - <a href="/profile/{{com.username}}">{{com.username}}
+                {{com.comment|safe}} -<p></p><a href="/profile/{{com.username}}"> {{com.username}}
         </a> on {{com.date}}
             
         </div>
