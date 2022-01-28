@@ -1,6 +1,8 @@
 const up_vote_spans = document.getElementsByClassName("up-vote");
 const down_vote_spans = document.getElementsByClassName("down-vote");
 const count = document.getElementsByClassName("number");
+const svg = document.getElementsByClassName("svg-icon")
+
 let votes = [];
 for (let i = 0; i < count.length; i += 1) {
     const thisUpVoteSpan = up_vote_spans[i];
@@ -29,7 +31,7 @@ for (let i = 0; i < count.length; i += 1) {
     );
 }
 
-function handleUpvote(i, e) {
+const handleUpvote = async (i,e) => {
     const currentVote = votes[i];
     const matchingUpSpan = up_vote_spans[i];
     const matchingDownSpan = down_vote_spans[i];
@@ -41,7 +43,7 @@ function handleUpvote(i, e) {
         type = "ques";
     }
     var ifvote = "novote";
-    if (e.target.id != $("#global_session_user").val()) {
+    if (e.target.id != document.getElementById("global_session_user").value) {
         if (currentVote.down) {
             matchingCount.innerHTML = currentCount + 2;
         } else if (currentVote.up === false) {
@@ -61,35 +63,34 @@ function handleUpvote(i, e) {
             currentVote.up = false;
         }
     } else {
-        $("#show_popups")
-            .append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
+        document.getElementById("show_popups").innerHTML = `<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
   <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-</div>`);
+</div>`
     }
-    $.ajax({
-        type: "POST",
-        url: "/cast_vote",
-        data: {
+    const request = await fetch('/cast_vote', {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
             voteuser: e.target.id,
-        },
-
-        success: function (response) {
-            if (response == "sameuser") {
-                matchingUpSpan.style.color = "dimgray";
-                currentVote.up = false;
-                console.log("hi");
-            } else if (response == "login") {
-                document.location.replace("/signin");
-            }
-        },
-    });
+        }),
+    })
+    response = await request.text()
+    if (response == "sameuser") {
+        matchingUpSpan.style.color = "dimgray";
+        currentVote.up = false;
+        console.log("hi");
+    } else if (response == "login") {
+        document.location.replace("/signin");
+    }
 }
 
-function handleDownvote(i, e) {
+const handleDownvote = async (i,e) => {
     const currentVote = votes[i];
     const matchingUpSpan = up_vote_spans[i];
     const matchingDownSpan = down_vote_spans[i];
@@ -101,7 +102,7 @@ function handleDownvote(i, e) {
         type = "ques";
     }
     var ifvote = "novote";
-    if (e.target.id != $("#global_session_user").val()) {
+    if (e.target.id != document.getElementById("global_session_user").value) {
         if (currentVote.up) {
             matchingCount.innerHTML = currentCount - 2;
         } else if (currentVote.down === false) {
@@ -120,126 +121,112 @@ function handleDownvote(i, e) {
             currentVote.down = false;
         }
     } else {
-        $("#show_popups")
-            .append(`<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
+        document.getElementById("show_popups").innerHTML = `<div class="alert alert-warning alert-dismissible fade show" role="alert" style="position:fixed; left: 50%; transform: translate(-50%, 0);">
   You can't vote your own answer or question.🙂
   <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-</div>`);
+</div>`
     }
-    $.ajax({
-        type: "POST",
-        url: "/cast_vote",
-        data: {
+    const request = await fetch('/cast_vote', {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             votetype: ifvote,
             ques_no: matchingCount.id.split("_")[1],
             type: type,
             voteuser: e.target.id,
-        },
-        success: function (res) {
-            console.log(res);
-            if (res == "sameuser") {
-                matchingDownSpan.style.color = "dimgray";
-                currentVote.down = false;
-            } else if (res == "login") {
-                document.location.replace("/signin");
-            }
-        },
-    });
+        }),
+    })
+    response = await request.text();
+    if (response == "sameuser") {
+        matchingUpSpan.style.color = "dimgray";
+        currentVote.up = false;
+        console.log("hi");
+    } else if (response == "login") {
+        document.location.replace("/signin");
+    }
+
 }
 var no_check = false;
-for (i = 0; i < $(".svg-icon").length; i++) {
-    if ($(".svg-icon").eq(i).attr("fill") == "#48a868") {
+for (i = 0; i < svg.length; i++) {
+    if (svg[i].getAttribute("fill") == "#48a868") {
         no_check = true;
     }
 }
 
 if (no_check) {
-    $(".svg-icon")
-        .filter(function () {
-            return $(this).attr("fill") == "#bbc0c4";
-        })
-        .hide();
-}
-
-// correct answer
-$(".svg-icon").click(function (e) {
-    var real = false;
-    if ($(this).attr("fill") == "#bbc0c4") {
-        $(this).attr("fill", "#48a868");
-        real = true;
-        $(".svg-icon")
-            .filter(function () {
-                return this.id != e.currentTarget.id;
-            })
-            .hide();
-    } else {
-        $(this).attr("fill", "#bbc0c4");
-        real = false;
-        $(".svg-icon")
-            .filter(function () {
-                return this.id != e.currentTarget.id;
-            })
-            .show();
+    let filteredSvg = svg.filter(e=>{
+        return e.getAttribute("fill") == "#bbc0c4";
+    })
+    for (i of filteredSvg){
+        i.classList.add("hide")
     }
-    $.ajax({
-        type: "GET",
-        url: `${window.location.pathname}`,
-        data: {
+        
+}
+console.log(svg)
+// correct answer
+
+svg.length != 0 && svg.forEach(element => {
+     element.addEventListener("click", async (e) => {
+    let real = false;
+    if (e.getAttribute("fill") == "#bbc0c4") {
+        e.setAttribute("fill", "#48a868");
+        real = true;
+        let filteredSvg = svg.filter(e=>{
+        return  this.id != e.currentTarget.id;
+    })
+    for (i of filteredSvg){
+        i.classList.add("hide")
+    }
+        
+    } else {
+        e.setAttribute("fill", "#bbc0c4");
+        real = false;
+        let filteredSvg = svg.filter(e=>{
+        return  this.id != e.currentTarget.id;
+    })
+    for (i of filteredSvg){
+        i.classList.remove("hide")
+    }
+    }
+        const request = await fetch(`/${window.location.pathname}`, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+        },
+        body: JSON.stringify({
             real_answer: real,
             number: this.id,
-        },
-        contentType: "application/json;charset=UTF-8",
-        success: function (response) {
-            if (response == "login") {
-                document.location.replace("/signin");
-            }
-        },
-    });
+        }),
+    })
+    response = await request.text();
+    
+},false);
 });
 
-// $.ajax({
-//     type: "GET",
-//     url: `${window.location.pathname}`,
-//     data: {
-//         real_answer: real,
-//         number: this.id
-//     },
-//     contentType: "application/json;charset=UTF-8",
-//     success: function(response) {
-//         if (response == "login") {
-//             document.location.replace("/signin")
-//         }
-//     },
-// });
-
-$(".textarea").on("input", function () {
-    $(this).prev().val(tinyMCE.activeEditor.getContent());
-    console.log($(this).prev().val());
+const textArea = document.getElementsByClassName("textarea")
+textArea.length != 0 && textArea.forEach(element => {
+    element.addEventListener("input", function (e) {
+    e.previousElementSibling.value = tinyMCE.activeEditor.getContent();
+});
 });
 
-console.log(
-    window.innerWidth -
-        $(".container")
-            .css("margin-left")
-            .replace(/[^-\d\.]/g, "")
-);
-$(".mce-content-body").css({
-    width:
-        window.innerWidth -
-        ($(".container")
-            .css("margin-right")
-            .replace(/[^-\d\.]/g, "") *
-            2 +
-            60),
-});
-$(window).resize(function () {
-    $(".mce-content-body").css({
-        width:
-            window.innerWidth -
-            ($(".container")
-                .css("margin-right")
-                .replace(/[^-\d\.]/g, "") *
-                2 +
-                60),
-    });
-});
+// console.log(
+//     window.innerWidth -
+//         $(".container")
+//             .css("margin-left")
+//             .replace(/[^-\d\.]/g, "")
+// );
+
+function resizeContent(){
+    let mceContent = document.getElementsByClassName("mce-content-body")
+    mceContent.length != 0 && mceContent.forEach(e=>{
+        e.style.width = window.innerWidth - document.getElementsByClassName("container")[0].style.marginRight.replace(/[^-\d\.]/g, "") *2 + 60
+    })
+    
+}
+resizeContent()
+window.addEventListener("resize",(e)=>{
+    resizeContent()
+})

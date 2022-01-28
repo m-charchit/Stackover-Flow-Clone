@@ -50,7 +50,7 @@
 {% endblock %} 
 {% block script %}
 <script>
-    a = $("#tagedit").val().trim()
-    $("#tagedit").val(a)
+    let tagEdit = document.getElementById("tagedit")
+    tagEdit.value = tagEdit.value.trim()
 </script>
 {% endblock script %}

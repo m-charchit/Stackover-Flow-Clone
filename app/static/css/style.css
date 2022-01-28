@@ -108,8 +108,12 @@ html {
     bottom: 20px;
     right:20px;
     outline: none;
-    display: none;
     z-index: 3;
+    opacity: 1;
+    transition: opacity 1s; 
+}
+.scroll.fade{
+    opacity:0;
 }
 .number {
     display: inline-block;

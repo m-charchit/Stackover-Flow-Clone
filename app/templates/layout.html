@@ -32,11 +32,11 @@
         });
     </script>
 
-    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    
     <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/layout.css')}}">
 
-    <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+
     <title>Stackover Flow 2.0 - Ask Questions, Get Answers, Code Better</title>
     <style>
     </style>
@@ -157,24 +157,43 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
 
     <script>
-        $(window).scroll(function () {
-            if (this.scrollY > 400) {
-                $(".scroll").fadeIn()
+        const scrollBtn = document.getElementsByClassName("scroll")[0]
+        window.addEventListener("scroll",()=>{
+            console.log(this.scrollY)
+            if (this.scrollY < 200) {
+                /*let opacity = 1
+                setInterval(()=>{
+                    if(opacity <= 0.1){
+                        clearInterval()
+                        scrollBtn.style.display = "none"
+                    }
+                    scrollBtn.style.opacity = opacity
+                    opacity -= opacity * 0.1
+                },100)*/
+                scrollBtn.classList.add("fade")
+                
             }
             else {
-                $(".scroll").fadeOut()
+                /*let opacity = 0.1   
+                scrollBtn.style.display = "block"
+                setInterval(()=>{
+                    if(opacity >= 1){
+                        clearInterval()
+                        
+                    }
+                    scrollBtn.style.opacity = opacity
+                    opacity += opacity * 0.1
+                },100)*/
+                scrollBtn.classList.remove("fade")
+                
 
             }
-
         })
-        $(".scroll").click(function (e) {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: "smooth"
-            })
-
+        scrollBtn.addEventListener("click",(e)=>{
+            window.scroll(0,0)
         })
+
+
     </script>
 
 
