@@ -160,6 +160,7 @@ a {
     background: #f6f6f6;
     max-height:  400px; 
     overflow: overlay;
+    padding: 0.7rem;
 }
 .mce-content-body pre::-webkit-scrollbar {
     width: 10px;

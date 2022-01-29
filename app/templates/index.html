@@ -77,14 +77,15 @@
                 style="float:left;">&larr; prev</button>
             <button  class="btn btn-primary page" id={{next}} style="float:right">Next →</button>
             <script>
-                $(".page").click(function (e) {
-                    if (!e.target.id.includes("#")){
-                    a = e.target.id.split("=")
-                    console.log(a)
-                    url_manager(a[0],a[1])
+                document.querySelectorAll(".page").forEach(e=>{
+                    e.addEventListener("click", (e) => {
+                        if (!e.target.id.includes("#")){
+                            a = e.target.id.split("=")  
+                            console.log(a)
+                            url_manager(a[0],a[1])
                 }
-                    
-                })
+            },false); 
+                });
                 
             </script>
             {% endif %}
@@ -112,16 +113,16 @@
     {% endblock %}
     {% block script %}
     <script>
-        $(document).ready(function () {
+        
             
-          
+          document.onload = (e) => {
             
 
-            $(".page-link").click(function (e){
-                url_manager("no_of_ques",$(this).text())
+            document.querySelectorAll(".page-link").forEach((e) => {
+                url_manager("no_of_ques",e.value)
                 
             })
-            
+        }
             
             
 
@@ -130,8 +131,7 @@
             /*if ( window.location.pathname.endsWith("/search") && !window.location.search){
                 window.location.replace("/")
             }*/
-    
-        })
+
         
     </script>
     

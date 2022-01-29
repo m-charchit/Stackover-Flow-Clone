@@ -5,9 +5,11 @@
     <button style="float:right; margin-left:5px;" class="oldest btn
         btn-sm btn-primary">latest</button>
         <script>
-            $(".oldest").click(function (e) {
-                url_manager("tab",$(this).text())
+            document.querySelectorAll(".oldest").forEach(e=>{
+                e.addEventListener("click", (e)=>{
+                url_manager("tab",e.target.innerText)
             })
+        },false) 
         </script>
 {% endmacro %} 
 

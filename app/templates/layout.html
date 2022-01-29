@@ -159,31 +159,14 @@
     <script>
         const scrollBtn = document.getElementsByClassName("scroll")[0]
         window.addEventListener("scroll",()=>{
-            console.log(this.scrollY)
+     
             if (this.scrollY < 200) {
-                /*let opacity = 1
-                setInterval(()=>{
-                    if(opacity <= 0.1){
-                        clearInterval()
-                        scrollBtn.style.display = "none"
-                    }
-                    scrollBtn.style.opacity = opacity
-                    opacity -= opacity * 0.1
-                },100)*/
+                
                 scrollBtn.classList.add("fade")
                 
             }
             else {
-                /*let opacity = 0.1   
-                scrollBtn.style.display = "block"
-                setInterval(()=>{
-                    if(opacity >= 1){
-                        clearInterval()
-                        
-                    }
-                    scrollBtn.style.opacity = opacity
-                    opacity += opacity * 0.1
-                },100)*/
+              
                 scrollBtn.classList.remove("fade")
                 
 

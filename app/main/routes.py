@@ -67,51 +67,53 @@ def edit_answer(sno):
 
 @main.route("/cast_vote", methods=["POST"])
 def cast_vote():
-    Voteuser = request.form.get("voteuser")  # name of user voted
-    if Voteuser == session["user"]:  # if user voted his own ans or ques .
-        return "sameuser"
-    aq = request.form.get("type")  # if question vote or answer vote
-    votetype = request.form.get("votetype")  # if downvote , upvote or novote
-    ques_no = request.form.get("ques_no")  # sno of voted ans or ques
-    user_vote = Vote.query.filter_by(username=session["user"],
-                                     no=ques_no,
-                                     aq_vote=aq).first()
-    # for adding the vote to question/answer
-    print(aq)
-    if aq == "answer":
-        my_ans = Answers.query.filter_by(ans_no=ques_no).first()  # if answer voted update it to vote column in db
-        print(my_ans)
-        if user_vote:
-            if user_vote.votetype == "downvote":
-                my_ans.votes -= 1 if votetype == "novote" else 2
-                print(my_ans.votes, "down")
+    if "user" in session:
+        Voteuser = request.form.get("voteuser")  
+            
+        if Voteuser == session["user"]:  # if user voted his own ans or ques .
+            return "sameuser"
+        aq = request.form.get("type")  # if question vote or answer vote
+        votetype = request.form.get("votetype")  # if downvote , upvote or novote
+        ques_no = request.form.get("ques_no")  # sno of voted ans or ques
+        user_vote = Vote.query.filter_by(username=session["user"],
+                                        no=ques_no,
+                                        aq_vote=aq).first()
+        
+        
+        if aq == "answer":
+            my_ans = Answers.query.filter_by(ans_no=ques_no).first()  # if answer voted update it to vote column in db
+            print(my_ans)
+            if user_vote:
+                if user_vote.votetype == "downvote":
+                    my_ans.votes -= 1 if votetype == "novote" else 2
+                    print(my_ans.votes, "down")
+                else:
+                    my_ans.votes += 1 if votetype == "novote" else 2
+                    print(my_ans.votes, "up")
             else:
-                my_ans.votes += 1 if votetype == "novote" else 2
-                print(my_ans.votes, "up")
+                if votetype == "upvote":
+                    my_ans.votes += 1
+                else:
+                    my_ans.votes -= 1
         else:
-            if votetype == "upvote":
-                my_ans.votes += 1
+            pass
+        if votetype != "novote":  # if downvote,upvote add it to db
+            if not user_vote:  # if vote don't exist then make a new row
+                voted = Vote(username=session["user"],
+                            no=ques_no,
+                            votetype=votetype,
+                            aq_vote=aq,
+                            Vote_user=Detail.query.filter_by(username=session["user"]).first(),
+                            vote_owner=Answers.query.get(ques_no))
+
+                db.session.add(voted)
             else:
-                my_ans.votes -= 1
-    else:
-        pass
-    if votetype != "novote":  # if downvote,upvote add it to db
-        if not user_vote:  # if vote don't exist then make a new row
-            voted = Vote(username=session["user"],
-                         no=ques_no,
-                         votetype=votetype,
-                         aq_vote=aq,
-                         Vote_user=Detail.query.filter_by(username=session["user"]).first(),
-                         vote_owner=Answers.query.get(ques_no))
-
-            db.session.add(voted)
+                user_vote.votetype = votetype  # else update the earlier one
         else:
-            user_vote.votetype = votetype  # else update the earlier one
-    else:
-        db.session.delete(user_vote)  # if novote then delete the row
-    db.session.commit()
-    return {"user": session["user"]}
-
+            db.session.delete(user_vote)  # if novote then delete the row
+        db.session.commit()
+        return {"user": session["user"]}
+    return "login"
 
 @main.route("/<string:sno>/<string:slug>", methods=["GET", "POST"])  # sno=question no,slug=ques_title 
 def ques_page(sno, slug):
@@ -141,6 +143,7 @@ def ques_page(sno, slug):
         tab = request.args.get("tab")
         # for marking accepted answer
         if real is not None:
+            print(request.args.get("number"),"hi")
             my_answer = Answers.query.filter_by(
                 ans_no=request.args.get("number")).first()
             before_request = my_answer.real_answer
@@ -173,8 +176,6 @@ def ques_page(sno, slug):
     elif "user" not in session:
         if request.method == "POST":  # if user is not login and try to answer or ... then send to signin page
             flash("Login To continue", "warning")
-            if request.form.get("voteuser"):
-                return "login"
             return redirect("/signin")
         elif request.args.get("real_answer"):  # if voting without login then also
             flash("Login To mark", "warning")

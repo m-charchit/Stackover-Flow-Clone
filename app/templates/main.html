@@ -3,20 +3,47 @@
 
 {% include "flash.html" %}
 <script>
+    
     function load_more(ids,myid,myclass){
         
-        $('div').filter(function() {
-
-        return parseInt( this.id.replace(`${myid}-`,''), 10) > 5;
-      }).hide();
-      $('hr').filter(function() {
-        return parseInt( this.className.replace(`${myclass}-`,''), 10) > 5;
-        }).hide();
-      
-      $(`.${ids}`).click(function (){ 
-          $(this).prevAll().show()
-            $(this).hide()
-        })}
+            
+        let divElements = document.querySelectorAll("div")
+        if (divElements.length != 0){
+        let filterDivElements = [...divElements].filter(e=> {
+        return parseInt( e.id.replace(`${myid}-`,''), 10) > 5;
+      })
+      filterDivElements.forEach(e=>{
+          e.classList.add("d-none")
+      })
+    }
+      let hrTags = document.querySelectorAll("hr")
+      if(hrTags.length !=0){
+        let filterHrTags = [...hrTags].filter(e=> {
+            
+        return e.classList.length != 0 && parseInt( e.classList[0].replace(`${myclass}-`,''), 10) > 5;
+      })
+      filterHrTags.forEach(e=>{
+          e.classList.add("d-none")
+      })
+    }
+      document.querySelectorAll(`.${ids}`).forEach(e=>{ 
+          e.addEventListener("click",e=>{ 
+              console.log("hi")
+              let prevElem = []
+              elem = e.target
+            while (elem.previousElementSibling){
+            prevElem.push(elem.previousElementSibling)
+            elem = elem.previousElementSibling
+          }
+          console.log(prevElem)
+            prevElem.forEach(e=>{
+                e.classList.remove("d-none")
+            })
+            e.target.classList.add("d-none")
+            })
+        })
+    }
+    
 </script>
 <div id="show_popups"></div>
 {% import 'macro.html' as macro %}
@@ -43,7 +70,7 @@
         </form>
 
         {% endif %}
-        <button type="button" class="btn btn-primary btn-sm" data-mdb-container="body" data-toggle="popover" data-placement="right" data-mdb-content="Link Copied!!">
+        <button type="button" class="btn btn-primary btn-sm" id="share" data-mdb-container="body" data-mdb-toggle="popover" data-mdb-trigger="focus" data-mdb-placement="right" data-mdb-content="Link Copied!!">
 Share
 </button>
             
@@ -183,7 +210,7 @@ Share
     <div class="row">
         <div class="col">
             {% if ans.username == session["user"] %}
-            <a id="ans_edit" class="btns" href="/edit_answer/{{question.sno}}">Edit</a>
+            <a id="ans_edit" class="btns" href="/edit_answer/{{ans.ans_no}}">Edit</a>
 
             <form action="/delete" method="get" style="display:
                 contents;">
@@ -196,7 +223,7 @@ Share
                 <button type="submit" class="link-btn btns">delete</button>
             </form>
             {% endif %}
-             <button type="button" class="link-btn btns share" id="#a{{ans.ans_no}}" data-mdb-container="body" data-mdb-toggle="popover" data-placement="right" data-mdb-content="Link Copied!!">
+             <button type="button" class="link-btn btns share" id="#a{{ans.ans_no}}" data-mdb-container="body" data-mdb-toggle="popover" data-mdb-trigger="focus" data-mdb-placement="right" data-mdb-content="Link Copied!!">
 Share
 </button>
         </div>
@@ -291,32 +318,32 @@ Share
 {% endblock %}
 {% block script %}
 <script>
-    $(document).ready(function () {
+    window.onload = () => {
         
-        /*var popoverTriggerList = [].slice.call( document.querySelectorAll( '[data-toggle="popover"]' ) );
+        var popoverTriggerList = [].slice.call( document.querySelectorAll( '[data-mdb-toggle="popover"]' ) );
         var popoverList = popoverTriggerList.map( function( popoverTrigger )
         {
-            return new bootstrap.Popover( popoverTrigger );
-        } );*/
-            
-        
-        $("#share").click(function (){
-            $("#link").val(window.location.href);
-            $("#link").select();
+            return new mdb.Popover( popoverTrigger );
+        } );
+        const CopyLink = (link) => {
+            let inputElem = document.getElementById("link")
+            inputElem.value = link
+            inputElem.select()
             document.execCommand("copy");
-            $("#link").val("");
-        })
-        $(document).on("click",".share",function (e){
-            loc = window.location.href ? window.location.href.split("#")[0] : window.location.href;
-            $("#link").val(`${loc}${e.target.id}`);
-            $("#link").select();
-            document.execCommand("copy");
-            $("#link").val("");
-            
-        })
+            inputElem.value = ""
+        }
+        document.querySelector("#share").addEventListener("click",e=>{
+            CopyLink(window.location.href)
 
+        },false)
+        
+            document.querySelectorAll(".share").forEach(e=>{
+                e.addEventListener("click",e=>{
+                    let loc = window.location.href.split("#")[0];
+                    CopyLink(`${loc}${e.target.id}`)
+                })
     })
-    
+}
 </script>
 
 {% endblock script %}
